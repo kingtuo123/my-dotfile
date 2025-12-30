@@ -1,0 +1,19 @@
+FROM debian-base:trixie
+
+ARG TARGEET
+ARG PACKAGES
+
+COPY ${TARGEET} /root/${TARGEET}
+
+USER root
+WORKDIR /root
+
+RUN apt update                             && \
+	apt install -y ${TARGEET} ${PACKAGES}  && \
+	rm -f ${TARGEET}                       && \
+	apt clean
+
+USER debian
+WORKDIR /home/debian
+
+CMD [ "/bin/bash" ]

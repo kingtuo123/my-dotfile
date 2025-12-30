@@ -1,0 +1,8 @@
+configuration {
+	modes: "drun";
+	threads: 8;
+}
+
+@theme "everforest"
+
+

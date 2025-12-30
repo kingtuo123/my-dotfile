@@ -1,0 +1,20 @@
+FROM debian:trixie
+
+ARG NAME
+ARG UID
+ARG PACKAGES
+
+COPY files/debian.sources /etc/apt/sources.list.d/debian.sources
+COPY files/bashrc         /etc/bash.bashrc
+
+RUN useradd -m -s /bin/bash -u ${UID} ${NAME}                && \
+	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  && \
+	apt update                                               && \
+	apt install -y sudo ${PACKAGES}                          && \
+	echo "${NAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers   && \
+	apt clean
+
+USER ${NAME}
+WORKDIR /home/${NAME}
+
+CMD [ "/bin/bash" ]

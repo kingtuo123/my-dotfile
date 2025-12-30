@@ -1,0 +1,9 @@
+www-client/firefox        -hwaccel -gmp-autoupdate -telemetry clang lto openh264 pulseaudio system-pipewire system-png
+media-video/pipewire      sound-server extra ffmpeg bluetooth
+media-sound/pulseaudio    -daemon
+gui-wm/sway               -X filecaps man swaybar swaynag -tray wallpapers
+dev-util/vulkan-tools     wayland -X cube
+app-i18n/fcitx            -autostart -emoji
+x11-misc/i3blocks         -contrib
+net-misc/chrony           -* caps rtc cmdmon readline seccomp
+media-libs/freetype       harfbuzz
