@@ -52,6 +52,6 @@ $(removed): %: $(PWD)%
 
 
 git:
-	git add -A
-	git commit -m "update"
-	git push
+	@git add -A
+	@git commit -m "update"
+	@git push
