@@ -26,7 +26,7 @@ required_packages += fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-fronten
 
 
 # 容器运行参数
-run_args := --rm
+run_args += --rm
 run_args += --name $(container_name)
 run_args += --privileged
 run_args += --network host
@@ -37,12 +37,14 @@ run_args += -e XMODIFIERS=@im=fcitx
 run_args += -e QT_IM_MODULE=fcitx
 run_args += -e GTK_IM_MODULE=fcitx
 run_args += -e XDG_RUNTIME_DIR=$$XDG_RUNTIME_DIR
+run_args += -e DISPLAY=:0
 run_args += -v $$XDG_RUNTIME_DIR:$$XDG_RUNTIME_DIR
 run_args += -v /etc/machine-id:/etc/machine-id:ro
 run_args += -v /dev:/dev
-run_args += -v /run/dbus:/run/dbus
+run_args += -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 run_args += -v /tmp:/tmp
 run_args += -v $(host_homedir):$(container_home)
+run_args += -v $$HOME/.fonts:$(container_home)/.fonts:ro
 
 
 # 镜像构建参数

@@ -6,6 +6,7 @@ host_distdir         := ./distdir
 is_container_running := $(strip $(shell docker container ls --filter name=$(container_name) --quiet))
 is_image_exist       := $(strip $(shell docker images | grep $(image_name) | grep $(version)))
 is_custom_start      := $(strip $(findstring start.sh,$(target_bin)))
+is_deb_target        := $(strip $(findstring .deb,$(target_name)))
 
 
 
@@ -41,7 +42,7 @@ endif
 
 
 #######################################################################################################
-ifdef target_name
+ifdef is_deb_target
 build_args += -f ../common/dockerfile.target
 else ifdef required_packages
 build_args += -f ../common/dockerfile.no-target
