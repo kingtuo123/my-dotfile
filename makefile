@@ -1,4 +1,4 @@
-origins += /etc/udev/rules.d/*.rules
+origins := /etc/udev/rules.d/*.rules
 origins += /etc/fstab
 origins += /etc/portage/make.conf
 origins += /etc/portage/repos.conf
@@ -39,7 +39,7 @@ removed := $(filter-out $(origins),$(subst ./,/,$(shell find . -mindepth 2 $(ign
 
 
 all: $(backups) $(removed)
-	@echo ""
+	@echo "Done!"
 
 
 $(backups): $(PWD)%: %
