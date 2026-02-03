@@ -58,7 +58,7 @@ alias re-source='source ~/.bashrc'
 alias dmesg-check='dmesg | grep -i -e firmware -e fail -e error -e warn'
 alias screen-off='xset dpms force off'
 alias sim="bash -c 'swaymsg splitv && swayimg -g && swaymsg split none &'"
-alias t="bash -c 'swaymsg splitv && foot -D \$PWD &>/dev/null && swaymsg split none &'"
+alias t="bash -c 'swaymsg splitv && foot -D \$PWD &>/dev/null && swaymsg split none &>/dev/null &'"
 alias b="cd ~/Github/blog"
 alias k="cd ~/Github/kingtuo123.github.io"
 
