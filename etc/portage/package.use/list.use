@@ -7,3 +7,5 @@ app-i18n/fcitx            -autostart -emoji
 x11-misc/i3blocks         -contrib
 net-misc/chrony           -* caps rtc cmdmon readline seccomp
 media-libs/freetype       harfbuzz
+dev-embedded/openocd      -* jlink usb
+dev-debug/gdb             server multitarget source-highlight xml

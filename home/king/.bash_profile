@@ -18,7 +18,7 @@ export GLFW_IM_MODULE=ibus
 export NO_AT_BRIDGE=1
 export WLR_RENDERER=vulkan
 export XDG_CONFIG_HOME=$HOME/.config
-export PATH+=:/home/king/Scripts
+export PATH+=:/home/king/Scripts:/opt/arm-gnu-toolchain/bin
 
 
 
