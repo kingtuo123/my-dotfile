@@ -288,6 +288,7 @@ function OpenInTerminal()
     local current_file = vim.fn.expand("%:p:h")
 	local current_path = vim.fn.shellescape(current_file)
     --os.execute("foot --title=floating-terminal --working-directory " .. current_path .. " &>/dev/null &")
-    os.execute("swaymsg splitv && foot -D " .. current_path .. " &>/dev/null && swaymsg split none &")
+    --os.execute("swaymsg splitv && foot -D " .. current_path .. " &>/dev/null && swaymsg split none &>/dev/null &")
+    os.execute("{ swaymsg splitv && foot -D " .. current_path .. " && swaymsg split none; } &>/dev/null &")
 end
 vim.keymap.set({'n', 'i'}, '<A-t>', OpenInTerminal)
