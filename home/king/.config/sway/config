@@ -5,7 +5,7 @@ output "HDMI-A-1" {
 	scale 2
 	subpixel rgb
 	color_profile icc ~/.local/share/icc/Sharp_L24.icm
-	bg ~/Pictures/Wallpapers/girl-1.jpg fill
+	bg ~/Pictures/Wallpapers/wave.jpg fill
 }
 
 
