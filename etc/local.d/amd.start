@@ -1,0 +1,10 @@
+# 关闭睿频
+echo "0" | tee /sys/devices/system/cpu/cpufreq/boost
+
+# 能效策略
+# performance           优先最高性能，积极升频          需要低延迟、满血性能的桌面/服务器
+# balance_performance   性能优先，但会适度节能          大多数桌面用户的默认好选择
+# balance_power         节能优先，但保留一定性能        笔记本轻负载场景
+# power                 极致节能，积极限制性能          需要续航或散热受限的场景
+# default               等同或接近 balance_performance  系统出厂时的初始状态
+echo "balance_power" | tee /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference

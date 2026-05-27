@@ -1,5 +1,6 @@
 origins := /etc/udev/rules.d/*.rules
 origins += /etc/fstab
+origins += /etc/local.d/*.start
 origins += /etc/portage/make.conf
 origins += /etc/portage/repos.conf
 origins += /etc/portage/package.use/list.use
