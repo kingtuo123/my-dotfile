@@ -5,11 +5,12 @@ fi
 
 
 # history 命令输出的记录数量
-export HISTSIZE=1000
+export HISTSIZE=10000
 # .bash_history 保存的历史命令数量
 export HISTFILESIZE=10000
 # 不保存: 空格开头的命令; 忽略重复命令; 删除重复命令
-export HISTCONTROL=ignorespace:ignoredups:erasedups
+export HISTCONTROL=ignorespace:ignoredups
+#export HISTCONTROL=ignorespace:ignoredups:erasedups
 # 显示的末尾目录层数
 # export PROMPT_DIRTRIM=4
 

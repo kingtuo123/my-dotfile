@@ -28,9 +28,9 @@ update_prompt() {
 PROMPT_COMMAND=update_prompt
 
 
-export HISTSIZE=1000
+export HISTSIZE=10000
 export HISTFILESIZE=10000
-export HISTCONTROL=ignorespace:ignoredups:erasedups
+export HISTCONTROL=ignorespace:ignoredups
 
 
 alias  l='ls --color -lh'

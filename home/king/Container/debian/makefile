@@ -9,20 +9,17 @@ container_name     := $(image_name)
 # 容器内的用户名称
 container_username := debian
 # 容器内的用户UID
-container_userid   := $$UID
+container_userid   := 1000
 # 容器内的家目录
 container_home     := /home/$(container_username)
 
 
-# 家目录
-host_homedir       := $$PWD/homedir
-# 文件目录
-host_files         := $$PWD/files
+# 主机上的共享家目录
+host_homedir       := ./homedir
 
 
 # 容器内需要安装的软件包
-required_packages := xwayland dbus pulseaudio bash-completion fonts-wqy-microhei 
-required_packages += fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 fcitx5-frontend-qt5
+required_packages := sudo xwayland pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei
 
 
 # 容器运行参数
@@ -48,7 +45,7 @@ run_args += -v $$HOME/.fonts:$(container_home)/.fonts:ro
 
 
 # 镜像构建参数
-build_args := --network host 
+build_args := --network host
 build_args += -t $(image_name):$(version)
 build_args += --build-arg "NAME=$(container_username)"
 build_args += --build-arg "UID=$(container_userid)"
@@ -57,10 +54,10 @@ build_args += --build-arg "PACKAGES=$(required_packages)"
 
 ####################################################################################################################
 is_container_running := $(strip $(shell docker container ls --filter name=$(container_name) --quiet))
-is_image_exist       := $(strip $(shell docker images | grep $(image_name) | grep $(version)))
+is_image_exist       := $(strip $(shell docker images --format "{{.Repository}}:{{.Tag}}" | grep $(image_name):$(version)))
 
 
-bash: image
+bash: image $(host_homedir)
 ifdef is_container_running
 	@docker exec -it  $(container_name) bash
 else
@@ -72,3 +69,7 @@ image:
 ifndef is_image_exist
 	@docker build . $(build_args)
 endif
+
+
+$(host_homedir):
+	@mkdir -p $@
