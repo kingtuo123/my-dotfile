@@ -12,7 +12,7 @@ run_script         := ./start.sh
 
 required_packages  :=
 
-shm_size           := 2g
+shm_size           := 8g
 
 cap_add            := SYS_ADMIN
 

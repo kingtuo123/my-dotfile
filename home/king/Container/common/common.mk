@@ -44,6 +44,12 @@ endif
 
 ifdef is_x11
 run_args += -e DISPLAY=:0
+run_args += -e GTK_IM_MODULE=fcitx
+run_args += -e QT_IM_MODULE=fcitx
+run_args += -e XMODIFIERS=@im=fcitx
+run_args += -e GLFW_IM_MODULE=ibus
+required_packages += x11-xserver-utils
+required_packages += fcitx5-frontend-gtk2 fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-frontend-qt6
 endif
 
 ifdef is_map_fontsdir
