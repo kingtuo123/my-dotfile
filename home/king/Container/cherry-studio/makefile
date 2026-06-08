@@ -1,20 +1,20 @@
-image_name         := clash-verge-rev
+image_name         := cherry-studio
 
-version            := 2.5.1
+version            := 1.9.11
 
-deb_src            := https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v$(version)/Clash.Verge_$(version)_amd64.deb
+deb_src            := https://github.com/CherryHQ/cherry-studio/releases/download/v1.9.11/Cherry-Studio-$(version)-amd64.deb
 
-deb_path           := ./distdir/clash-verge_$(version)_amd64.deb
+deb_path           := ./distdir/Cherry-Studio-$(version)-amd64.deb
 
-run_cmd            := /usr/bin/clash-verge
+run_cmd            :=
 
-run_script         :=
+run_script         := ./start.sh
 
-required_packages  := libappindicator3-1
+required_packages  :=
 
-shm_size           := 1g
+shm_size           := 2g
 
-cap_add            :=
+cap_add            := SYS_ADMIN
 
 is_privileged      :=
 
