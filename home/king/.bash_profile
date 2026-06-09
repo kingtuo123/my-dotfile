@@ -1,6 +1,6 @@
-#if [[ -f ~/.bashrc ]] ; then
-#	. ~/.bashrc
-#fi
+if [[ -f ~/.bashrc ]] ; then
+	. ~/.bashrc
+fi
 
 
 
@@ -35,6 +35,6 @@ fi
 
 
 
-if [[ -z $WAYLAND_DISPLAY ]]; then
+if [[ -z "$(pgrep sway)" ]]; then
 	exec sway &>/tmp/sway.log
 fi
