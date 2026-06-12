@@ -1,24 +1,24 @@
-image_name         := cherry-studio
+image_name         := wine-base
 
-version            := 1.9.11
+version            := 10.14
 
-deb_src            := https://github.com/CherryHQ/cherry-studio/releases/download/v$(version)/Cherry-Studio-$(version)-amd64.deb
+deb_src            :=
 
-deb_path           := ./distdir/Cherry-Studio-$(version)-amd64.deb
+deb_path           := ./distdir/deepin-app-store-runtime_1.0.1.1~spark4_all.deb  ./distdir/deepin-wine10-stable_10.14deepin5-spark1_amd64.deb
 
-run_cmd            :=
+run_cmd            := /usr/bin/bash
 
-run_script         := ./start.sh
+run_script         :=
 
 required_packages  :=
 
-shm_size           := 8g
+shm_size           := 1g
 
 cap_add            := SYS_ADMIN
 
 is_privileged      :=
 
-is_x11             :=
+is_x11             := true
 
 is_map_fontsdir    := true
 

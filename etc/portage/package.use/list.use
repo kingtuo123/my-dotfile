@@ -12,3 +12,4 @@ dev-debug/gdb             server multitarget source-highlight xml
 app-emulation/qemu        qemu_softmmu_targets_arm  qemu_softmmu_targets_x86_64  qemu_user_targets_x86_64 vnc spice ssh usb fuse virtfs usbredir
 app-containers/incus      qemu
 app-emulation/virt-viewer -libvirt spice vnc
+net-firewall/nftables     json

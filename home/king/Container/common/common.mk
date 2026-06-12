@@ -61,11 +61,16 @@ endif
 
 ################################################## 构建参数 ################################################################
 build_args += --network host
-build_args += -f ../common/dockerfile
 build_args += -t $(image_name):$(version)
 build_args += --build-arg DEB_PATH="$(deb_path)"
 build_args += --build-arg REQUIRED_PACKAGES="$(required_packages)"
 
+
+ifdef exe_path
+build_args += -f ../common/exe.dockerfile
+else
+build_args += -f ../common/deb.dockerfile
+endif
 
 
 
@@ -88,6 +93,14 @@ endif
 ifdef run_script
 	@docker run -d $(run_args) -v $(run_script):/usr/local/bin/start.sh $(image_name):$(version) start.sh
 endif
+ifdef exe_path
+ifndef run_exe
+	@docker run -it $(run_args) -v $(exe_path):/mnt/install.exe $(image_name):$(version) deepin-wine10-stable /mnt/install.exe
+endif
+ifdef run_exe
+	@docker run -it $(run_args) $(image_name):$(version) deepin-wine10-stable $(run_exe)
+endif
+endif
 
 
 
@@ -101,6 +114,9 @@ ifdef run_cmd
 endif
 ifdef run_script
 	@docker run -it $(run_args) -v $(run_script):/usr/local/bin/start.sh $(image_name):$(version) bash
+endif
+ifdef exe_path
+	@docker run -it $(run_args) -v $(exe_path):/mnt/install.exe $(image_name):$(version) bash
 endif
 endif
 

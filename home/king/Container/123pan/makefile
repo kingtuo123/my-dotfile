@@ -1,24 +1,28 @@
-image_name         := cherry-studio
+image_name         := 123pan
 
-version            := 1.9.11
+version            := 3.1.7
 
-deb_src            := https://github.com/CherryHQ/cherry-studio/releases/download/v$(version)/Cherry-Studio-$(version)-amd64.deb
+deb_src            :=
 
-deb_path           := ./distdir/Cherry-Studio-$(version)-amd64.deb
+deb_path           :=
+
+exe_path           := ./distdir/123pan_3.1.7.exe
 
 run_cmd            :=
 
-run_script         := ./start.sh
+run_script         :=
+
+run_exe            := .wine/drive_c/users/debian/AppData/Local/123pan/123pan.exe
 
 required_packages  :=
 
-shm_size           := 8g
+shm_size           := 1g
 
 cap_add            := SYS_ADMIN
 
 is_privileged      :=
 
-is_x11             :=
+is_x11             := true
 
 is_map_fontsdir    := true
 

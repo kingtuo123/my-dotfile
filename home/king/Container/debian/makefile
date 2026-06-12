@@ -25,7 +25,7 @@ required_packages := sudo xwayland pciutils mesa-utils pipewire-audio fonts-deja
 # 容器运行参数
 run_args += --rm
 run_args += --name $(container_name)
-run_args += --privileged
+#run_args += --privileged
 run_args += --network host
 run_args += -e IMAGE_NAME=$(image_name):$(version)
 run_args += -e WAYLAND_DISPLAY=$$WAYLAND_DISPLAY
@@ -37,7 +37,7 @@ run_args += -e XDG_RUNTIME_DIR=$$XDG_RUNTIME_DIR
 run_args += -e DISPLAY=:0
 run_args += -v $$XDG_RUNTIME_DIR:$$XDG_RUNTIME_DIR
 run_args += -v /etc/machine-id:/etc/machine-id:ro
-run_args += -v /dev:/dev
+#run_args += -v /dev:/dev
 run_args += -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 run_args += -v /tmp:/tmp
 run_args += -v $(host_homedir):$(container_home)
