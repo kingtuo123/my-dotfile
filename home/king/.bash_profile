@@ -21,6 +21,10 @@ export XDG_CONFIG_HOME=$HOME/.config
 export PATH+=:/home/king/Scripts:/opt/arm-gnu-toolchain/bin
 
 
+# user custom
+export WIN10_DESKTOP="my-win10/Users/Administrator/Desktop"
+
+
 
 if [[ -z "$DBUS_SESSION_BUS_ADDRESS" ]]; then
 	dbus="/tmp/my-dbus"

@@ -209,6 +209,7 @@ for_window [ app_id = "clash-verge"                ] floating enable
 assign     [ app_id = "clash-verge"                ] workspace $ws-proxy
 for_window [ app_id = "com.follow.clash"           ] floating enable
 assign     [ app_id = "com.follow.clash"           ] workspace $ws-proxy
+for_window [ app_id = "remote-viewer"              ] floating enable
 
 
 
