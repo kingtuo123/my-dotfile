@@ -8,6 +8,11 @@ command=scripts/weather.sh
 format=json
 interval=900
 
+[weather]
+command=scripts/portage.sh
+format=json
+interval=900
+
 
 [download]
 command=scripts/download.sh

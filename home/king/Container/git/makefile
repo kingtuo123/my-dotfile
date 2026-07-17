@@ -1,26 +1,28 @@
-image_name         := drawio
+image_name         := git
 
-version            := 30.3.11
+version            := latest
 
-deb_src            := https://github.com/jgraph/drawio-desktop/releases/download/v$(version)/drawio-amd64-$(version).deb
+deb_src            :=
 
-deb_path           := ./distdir/drawio-amd64-$(version).deb
+deb_path           :=
 
-run_cmd            :=
+run_cmd            := /bin/bash
 
-run_script         := ./start.sh
+run_script         :=
 
-required_packages  :=
+required_packages  := git tree vim
 
-shm_size           := 2g
+shm_size           :=
 
-cap_add            := SYS_ADMIN
+cap_add            :=
 
 is_privileged      :=
 
 is_x11             :=
 
 is_map_fontsdir    := true
+
+run_args           :=
 
 include ../common/common.mk
 

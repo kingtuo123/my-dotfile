@@ -11,5 +11,11 @@ dev-embedded/openocd      -* jlink usb
 dev-debug/gdb             server multitarget source-highlight xml
 app-emulation/qemu        qemu_softmmu_targets_arm  qemu_softmmu_targets_x86_64  qemu_user_targets_x86_64 vnc spice ssh usb fuse virtfs usbredir
 app-containers/incus      qemu
-app-emulation/virt-viewer -libvirt spice vnc
-net-firewall/nftables     json
+
+# Incus 直接调用 SPICE 客户端，不需要通过 libvirt 查找虚拟机
+app-emulation/virt-viewer   -* -libvirt spice
+
+# Incus 需要 nftables 支持 json 来管理 nftables 规则
+net-firewall/nftables    json
+
+net-firewall/iptables    nftables

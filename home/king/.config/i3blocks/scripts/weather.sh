@@ -11,4 +11,4 @@ weather=$(echo $data | jq -r .lives[0].weather)
 temperature=$(echo $data | jq -r .lives[0].temperature)
 humidity=$(echo $data | jq -r .lives[0].humidity)
 
-printf '{"full_text":"   %s  %s℃  %s%%   "}\n' $weather $temperature $humidity
+printf '{"full_text":"   天气  %s  %s℃  %s%%   "}\n' $weather $temperature $humidity

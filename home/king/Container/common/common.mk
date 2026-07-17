@@ -27,6 +27,8 @@ run_args += -e IMAGE_NAME=$(image_name):$(version)
 run_args += -e WAYLAND_DISPLAY=$$WAYLAND_DISPLAY
 run_args += -e DBUS_SESSION_BUS_ADDRESS=$$DBUS_SESSION_BUS_ADDRESS
 run_args += -e XDG_RUNTIME_DIR=/run/user/1000
+run_args += -e LANG=C.UTF-8
+run_args += -e LC_ALL=C.UTF-8
 
 
 

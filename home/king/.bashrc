@@ -88,6 +88,14 @@ function pon(){
 	)
 	history -r
 }
+function pon-wandayun(){
+	history -w
+	(
+		proxy='http://192.168.20.10:7892'
+		http_proxy=$proxy https_proxy=$proxy RSYNC_PROXY=$proxy bash
+	)
+	history -r
+}
 
 
 

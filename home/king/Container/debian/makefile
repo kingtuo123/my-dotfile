@@ -19,7 +19,7 @@ host_homedir       := ./homedir
 
 
 # 容器内需要安装的软件包
-required_packages := sudo xwayland pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei
+required_packages := sudo xwayland pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei bash-completion
 
 
 # 容器运行参数
