@@ -1,6 +1,6 @@
 image_name         := clash-verge-rev
 
-version            := 2.5.1
+version            := 2.5.2
 
 deb_src            := https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v$(version)/Clash.Verge_$(version)_amd64.deb
 

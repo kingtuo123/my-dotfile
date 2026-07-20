@@ -3,13 +3,14 @@ separator_block_width=0
 align=center
 
 
-[weather]
-command=scripts/weather.sh
+[portage]
+command=scripts/portage.sh
 format=json
 interval=900
 
+
 [weather]
-command=scripts/portage.sh
+command=scripts/weather.sh
 format=json
 interval=900
 
