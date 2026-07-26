@@ -17,6 +17,7 @@ origins += ~/.config/nvim
 origins += ~/.config/rofi
 origins += ~/.config/sway
 origins += ~/.config/swayimg
+origins += ~/.config/repo
 
 
 
@@ -27,6 +28,7 @@ ignores += ! -name "lazy-lock.json"
 ignores += ! -path "*/.git/*"
 ignores += ! -path "*/homedir/*"
 ignores += ! -path "*/distdir/*"
+ignores += ! -path "*/repo/*/files/*"
 
 
 
