@@ -118,14 +118,15 @@ bind -x '"\et":"t"'
 
 # 终端 title 设置
 case "$TERM" in
-	foot*|alacritty*)
-		set_title() {
-			if [[ "$BASH_COMMAND" == "update_prompt" ]]; then
-				echo -ne "\033]0;${USER:-bash} @ $(dirs)\007"
-			elif [[ -n "$BASH_COMMAND" ]]; then
-				echo -ne "\033]0;${BASH_COMMAND}\007"
-			fi
-		}
-		trap 'set_title' DEBUG
-		;;
+    foot*|alacritty*)
+        set_title() {
+            if [[ "$BASH_COMMAND" == "update_prompt" ]]; then
+                echo -ne "\033]0;${USER:-bash} @ $(dirs)\007"
+            elif [[ -n "$BASH_COMMAND" ]]; then
+                echo -ne "\033]0;${BASH_COMMAND}\007"
+                history -w
+            fi
+        }
+        trap 'set_title' DEBUG
+    ;;
 esac

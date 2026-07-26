@@ -1,0 +1,217 @@
+#!/bin/bash
+
+
+
+
+trap main EXIT
+
+
+PN=drawio
+IMG=debian:trixie
+
+
+function main {
+    init_env
+    init_pkg_config
+    init_dir
+
+    read_package_sh
+    setup_use
+    check_options
+    fetch_package
+    create_dockerfile
+    docker_build
+}
+
+
+function clog {
+    local RESET="\e[0m"
+    local RED="\e[31m"
+    local GREEN="\e[32m"
+    local YELLOW="\e[33m"
+    local BLUE="\e[34m"
+    local MAGENTA="\e[35m"
+    local CYAN="\e[36m"
+    local WHITE="\e[37m"
+    if $DEBUG; then
+        echo -e "${YELLOW}$1${RESET}"
+    fi
+}
+
+
+function init_env {
+    DEBUG=true
+    CPKG_REPO_PATH=${HOME}/Desktop/repo
+    CPKG_HOME_PATH=${HOME}/Desktop/container
+}
+
+
+
+
+function init_pkg_config {
+    USE=""
+    SRC=""
+    DEP=""
+}
+
+
+function init_dir {
+    if [[ ! -e "$CPKG_HOME_PATH" ]]; then
+        mkdir -p $CPKG_HOME_PATH
+        echo "创建目录：$CPKG_HOME_PATH"
+    fi
+    if [[ ! -e "$CPKG_REPO_PATH" ]]; then
+        mkdir -p $CPKG_REPO_PATH
+        echo "创建目录：$CPKG_REPO_PATH"
+    fi
+}
+
+
+
+
+function read_package_sh {
+    echo "========== read_package_sh =========="
+    SH=$(dir -1 ${CPKG_REPO_PATH}/$PN/*.sh | sort -V | tail -n1)
+
+    if [[ ! -e $SH ]]; then
+        echo "找不到软件包：${PN@Q}"
+        exit 1
+    fi
+
+    PF=$(basename ${SH%.*})
+    PV=${PF##*-}
+    FS=${CPKG_REPO_PATH}/${PN}/files
+    PH=${CPKG_HOME_PATH}/${PN}
+
+    source ${SH}
+
+    echo "SH = $SH"
+    echo "PN = $PN"
+    echo "PV = $PV"
+    echo "PF = $PF"
+    echo "FS = ${CPKG_REPO_PATH}/${PN}/files"
+    echo "PH = $PH"
+    echo "USE = $USE"
+    echo "DEP = $DEP"
+    echo "SRC = ${SRC}"
+
+    echo ""
+}
+
+
+
+function fetch_package {
+    echo "========== fetch_package =========="
+    if [[ ! -n "${SRC}" ]]; then
+        echo -e "SRC 未设置，跳过 ... \n"
+        return
+    fi
+    if [[ ! -e ${FS} ]]; then
+        mkdir -p ${FS}
+    fi
+    LINK=("${SRC}")
+    echo "SRC = ${SRC}"
+    for i in "${!LINK[@]}"; do
+        if [[ "${LINK[$i]##*.}" =~ "deb" ]]; then
+            PKG+=("./${LINK[$i]##*/}")
+        fi
+        echo "LINK[$i] = ${LINK[$i]}"
+    done
+    for i in "${!PKG[@]}"; do
+        echo "PKG[$i] = ${PKG[$i]}"
+    done
+    for i in "${!LINK[@]}"; do
+        echo "获取 ${LINK[$i]}"
+    done
+    echo ""
+}
+
+function create_dockerfile {
+    cat << EOF > ${FS}/dockerfile
+FROM ${IMG}
+
+ARG BUILD_DEP=${DEP}
+ARG BUILD_PKG=$(echo ${PKG[@]})
+ARG http_proxy=${http_proxy}
+ARG https_proxy=${https_proxy}
+
+USER root
+WORKDIR /root
+
+RUN --mount=type=bind,source=${FS},target=/root/files \
+cd /root/files && \
+source build_*.sh && \
+build_prepare && \
+build_depend && \
+build_package && \
+build_config && \
+build_finish
+
+USER debian
+WORKDIR /home/debian
+
+CMD [ "/bin/bash" ]
+EOF
+}
+
+function build_prepare {
+    :
+}
+
+function build_depend {
+    if [[ -n "${BUILD_DEP}" ]]; then
+        apt install -y ${BUILD_DEP}
+    fi
+}
+
+function build_package {
+    if [[ -n "${BUILD_PKG}" ]]; then
+        apt install -y ${BUILD_PKG}
+    fi
+}
+
+function build_config {
+    :
+}
+
+function build_finish {
+    apt clean
+}
+
+
+function docker_build {
+    declare -f build_prepare > ${FS}/build_prepare.sh
+    declare -f build_depend  > ${FS}/build_depend.sh
+    declare -f build_package > ${FS}/build_package.sh
+    declare -f build_config  > ${FS}/build_config.sh
+    declare -f build_finish  > ${FS}/build_finish.sh
+    echo "docker build --network host -t ${PN}:${PV} ${FS}"
+}
+
+
+function setup_use {
+    echo "========== setup_use =========="
+    for use in ${USE}; do
+        case $use in
+        "wayland")
+            RUN_OPTIONS+=("-e WAYLAND_DISPLAY=$WAYLAND_DISPLAY")
+            echo $use
+            ;;
+        "net-host")
+            RUN_OPTIONS+=("--network host")
+            echo $use
+            ;;
+        *)
+            echo "未识别：$use"
+            ;;
+        esac
+    done
+    echo ""
+}
+
+
+function check_options {
+    echo "========== check_options =========="
+    echo "运行参数：${RUN_OPTIONS[@]}"
+    echo ""
+}

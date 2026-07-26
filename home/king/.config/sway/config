@@ -133,7 +133,7 @@ bindsym $mod+Shift+Left   move left
 bindsym $mod+Shift+Down   move down
 bindsym $mod+Shift+Up     move up
 bindsym $mod+Shift+Right  move right
-bindsym $mod+c            move position center 
+bindsym $mod+c            move position center
 bindsym $mod+Shift+1      move container to workspace number $ws1
 bindsym $mod+Shift+2      move container to workspace number $ws2
 bindsym $mod+Shift+3      move container to workspace number $ws3
