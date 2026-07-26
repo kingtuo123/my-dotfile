@@ -1,49 +1,61 @@
 #!/bin/bash
 
-
-
-
 trap main EXIT
 
-
-PN=drawio
 ARG=($@)
 
 function main {
-    case "${ARG[0]}" in
-        "install")
-            if [[ -n "${ARG[1]}" ]]; then
-                PN=${ARG[1]}
-                init
-                read_package_sh
-                setup_use
-                fetch_package
-                create_dockerfile
-                docker_build
-            else
-                echo "请指定包名"
-                exit 1
-            fi
-            ;;
-        "run")
-            if [[ -n "${ARG[1]}" ]]; then
-                PN=${ARG[1]}
-                init
-                read_package_sh
-                setup_use
-                docker_run
-            else
-                echo "请指定包名"
-                exit 1
-            fi
-            ;;
-        "")
-            echo "请使用命令：install，run"
-            ;;
-        *)
-            echo "不支持的命令"
-            ;;
-    esac
+    if [[ -n "${ARG[0]}" ]]; then
+        PN=${ARG[0]}
+    else
+        echo "请指定包名"
+        exit 1
+    fi
+
+    init
+    read_package_sh
+    setup_use
+    fetch_package
+    create_dockerfile
+    docker_build
+    docker_run
+
+
+
+#    case "${ARG[0]}" in
+#        "install")
+#            if [[ -n "${ARG[1]}" ]]; then
+#                PN=${ARG[1]}
+#                init
+#                read_package_sh
+#                setup_use
+#                fetch_package
+#                create_dockerfile
+#                docker_build
+#            else
+#                echo "请指定包名"
+#                exit 1
+#            fi
+#            ;;
+#        "run")
+#            if [[ -n "${ARG[1]}" ]]; then
+#                PN=${ARG[1]}
+#                init
+#                read_package_sh
+#                setup_use
+#                docker_run
+#            else
+#                echo "请指定包名"
+#                exit 1
+#            fi
+#            ;;
+#        "")
+#            echo "请使用命令：install，run"
+#            ;;
+#        *)
+#            echo "不支持的命令"
+#            ;;
+#    esac
 }
 
 
@@ -73,11 +85,16 @@ function init {
 
 function read_package_sh {
     func_title
-    if [[ ! -e ${CPKG_REPO_PATH}/$PN ]]; then
+    if [[ ! -e ${CPKG_REPO_PATH}/${PN} ]]; then
         echo "找不到软件包：${PN@Q}"
         exit 1
     fi
-    SH=$(dir -1 ${CPKG_REPO_PATH}/$PN/*.sh | sort -V | tail -n1)
+    if [[ -e ${CPKG_REPO_PATH}/$PN/${PN} ]]; then
+        echo "使用指定版本 ${CPKG_REPO_PATH}/$PN/${PN} -> $(readlink ${CPKG_REPO_PATH}/$PN/${PN})"
+        SH=$(readlink -f ${CPKG_REPO_PATH}/$PN/${PN})
+    else
+        SH=$(dir -1 ${CPKG_REPO_PATH}/$PN/*.sh | sort -V | tail -n1)
+    fi
 
 
     PF=$(basename ${SH%.*})
@@ -97,6 +114,9 @@ function read_package_sh {
     echo "DEP = $DEP"
     echo "SRC = ${SRC}"
 
+    is_container_running=$(docker container ls --filter name=${PN} --quiet)
+    is_image_exist=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "${PN}:${PV}")
+
     echo ""
 }
 
@@ -104,6 +124,10 @@ function read_package_sh {
 
 function fetch_package {
     func_title
+    if [[ -n "$is_image_exist" ]]; then
+        echo -e "镜像 ${PN}:${PV} 已存在，跳过 ... \n"
+        return
+    fi
     if [[ ! -n "${SRC}" ]]; then
         echo -e "SRC 未设置，跳过 ... \n"
         return
@@ -133,6 +157,10 @@ function fetch_package {
 
 function create_dockerfile {
     func_title
+    if [[ -n "$is_image_exist" ]]; then
+        echo -e "镜像 ${PN}:${PV} 已存在，跳过 ... \n"
+        return
+    fi
     echo "创建 ${FS}/dockerfile"
     cat << EOF > ${FS}/dockerfile
 FROM ${IMG}
@@ -156,6 +184,7 @@ build_finish
 
 USER ${CUSER}
 WORKDIR /home/${CUSER}
+STOPSIGNAL SIGKILL
 
 CMD [ "/bin/bash" ]
 EOF
@@ -189,6 +218,10 @@ function build_finish {
 
 function docker_build {
     func_title
+    if [[ -n "$is_image_exist" ]]; then
+        echo -e "镜像 ${PN}:${PV} 已存在，跳过 ... \n"
+        return
+    fi
     local build="build_prepare build_depend build_package build_config build_finish"
     for func in ${build}; do
         declare -f ${func} > ${FS}/${func}.sh
@@ -261,7 +294,23 @@ function setup_use {
 
 function docker_run {
     func_title
-    echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV}"
+    if [[ -n "$is_container_running" ]]; then
+        if [[ "${ARG[1]}" == "bash" ]]; then
+            echo "docker exec -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            return
+        else
+            echo -e "容器 ${PN} 运行中，停止容器 ... \n"
+            docker kill ${PN}
+            echo -e "重启容器 ... \n"
+            sleep 1s
+        fi
+    else
+        if [[ "${ARG[1]}" == "bash" ]]; then
+            echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            return
+        fi
+    fi
+    echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}"
 }
 
 
