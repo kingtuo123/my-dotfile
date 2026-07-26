@@ -7,55 +7,57 @@ trap main EXIT
 
 
 PN=drawio
-IMG=debian:trixie
-
+ARG=($@)
 
 function main {
-    init_env
-    init_pkg_config
-    init_dir
-
-    read_package_sh
-    setup_use
-    check_options
-    fetch_package
-    create_dockerfile
-    docker_build
+    case "${ARG[0]}" in
+        "install")
+            if [[ -n "${ARG[1]}" ]]; then
+                PN=${ARG[1]}
+                init
+                read_package_sh
+                setup_use
+                fetch_package
+                create_dockerfile
+                docker_build
+            else
+                echo "请指定包名"
+                exit 1
+            fi
+            ;;
+        "run")
+            if [[ -n "${ARG[1]}" ]]; then
+                PN=${ARG[1]}
+                init
+                read_package_sh
+                setup_use
+                docker_run
+            else
+                echo "请指定包名"
+                exit 1
+            fi
+            ;;
+        "")
+            echo "请使用命令：install，run"
+            ;;
+        *)
+            echo "不支持的命令"
+            ;;
+    esac
 }
 
 
-function clog {
-    local RESET="\e[0m"
-    local RED="\e[31m"
-    local GREEN="\e[32m"
-    local YELLOW="\e[33m"
-    local BLUE="\e[34m"
-    local MAGENTA="\e[35m"
-    local CYAN="\e[36m"
-    local WHITE="\e[37m"
-    if $DEBUG; then
-        echo -e "${YELLOW}$1${RESET}"
-    fi
-}
 
 
-function init_env {
-    DEBUG=true
+function init {
+    func_title
+
+    IMG=debian:trixie
+    CUSER=$USER
+    CUID=$UID
     CPKG_REPO_PATH=${HOME}/Desktop/repo
     CPKG_HOME_PATH=${HOME}/Desktop/container
-}
 
-
-
-
-function init_pkg_config {
-    USE=""
-    SRC=""
-    DEP=""
-}
-
-
-function init_dir {
     if [[ ! -e "$CPKG_HOME_PATH" ]]; then
         mkdir -p $CPKG_HOME_PATH
         echo "创建目录：$CPKG_HOME_PATH"
@@ -70,13 +72,13 @@ function init_dir {
 
 
 function read_package_sh {
-    echo "========== read_package_sh =========="
-    SH=$(dir -1 ${CPKG_REPO_PATH}/$PN/*.sh | sort -V | tail -n1)
-
-    if [[ ! -e $SH ]]; then
+    func_title
+    if [[ ! -e ${CPKG_REPO_PATH}/$PN ]]; then
         echo "找不到软件包：${PN@Q}"
         exit 1
     fi
+    SH=$(dir -1 ${CPKG_REPO_PATH}/$PN/*.sh | sort -V | tail -n1)
+
 
     PF=$(basename ${SH%.*})
     PV=${PF##*-}
@@ -85,12 +87,12 @@ function read_package_sh {
 
     source ${SH}
 
-    echo "SH = $SH"
-    echo "PN = $PN"
-    echo "PV = $PV"
-    echo "PF = $PF"
-    echo "FS = ${CPKG_REPO_PATH}/${PN}/files"
-    echo "PH = $PH"
+    echo "SH  = $SH"
+    echo "PN  = $PN"
+    echo "PV  = $PV"
+    echo "PF  = $PF"
+    echo "FS  = ${CPKG_REPO_PATH}/${PN}/files"
+    echo "PH  = $PH"
     echo "USE = $USE"
     echo "DEP = $DEP"
     echo "SRC = ${SRC}"
@@ -101,7 +103,7 @@ function read_package_sh {
 
 
 function fetch_package {
-    echo "========== fetch_package =========="
+    func_title
     if [[ ! -n "${SRC}" ]]; then
         echo -e "SRC 未设置，跳过 ... \n"
         return
@@ -110,7 +112,6 @@ function fetch_package {
         mkdir -p ${FS}
     fi
     LINK=("${SRC}")
-    echo "SRC = ${SRC}"
     for i in "${!LINK[@]}"; do
         if [[ "${LINK[$i]##*.}" =~ "deb" ]]; then
             PKG+=("./${LINK[$i]##*/}")
@@ -118,15 +119,21 @@ function fetch_package {
         echo "LINK[$i] = ${LINK[$i]}"
     done
     for i in "${!PKG[@]}"; do
-        echo "PKG[$i] = ${PKG[$i]}"
+        echo "PKG[$i]  = ${PKG[$i]}"
     done
     for i in "${!LINK[@]}"; do
-        echo "获取 ${LINK[$i]}"
+        if [[ ! -e "${FS}/${LINK[$i]##*/}" ]]; then
+            echo "获取 ${LINK[$i]} -> ${LINK[$i]##*/}"
+        else
+            echo "已存在 ${LINK[$i]##*/}，跳过 ..."
+        fi
     done
     echo ""
 }
 
 function create_dockerfile {
+    func_title
+    echo "创建 ${FS}/dockerfile"
     cat << EOF > ${FS}/dockerfile
 FROM ${IMG}
 
@@ -147,11 +154,12 @@ build_package && \
 build_config && \
 build_finish
 
-USER debian
-WORKDIR /home/debian
+USER ${CUSER}
+WORKDIR /home/${CUSER}
 
 CMD [ "/bin/bash" ]
 EOF
+    echo -e "\e[30m$(cat ${FS}/dockerfile)\e[0m\n"
 }
 
 function build_prepare {
@@ -180,38 +188,101 @@ function build_finish {
 
 
 function docker_build {
-    declare -f build_prepare > ${FS}/build_prepare.sh
-    declare -f build_depend  > ${FS}/build_depend.sh
-    declare -f build_package > ${FS}/build_package.sh
-    declare -f build_config  > ${FS}/build_config.sh
-    declare -f build_finish  > ${FS}/build_finish.sh
-    echo "docker build --network host -t ${PN}:${PV} ${FS}"
+    func_title
+    local build="build_prepare build_depend build_package build_config build_finish"
+    for func in ${build}; do
+        declare -f ${func} > ${FS}/${func}.sh
+        echo "创建 ${FS}/${func}.sh"
+        echo -e "\e[30m$(cat ${FS}/${func}.sh)\e[0m"
+    done
+    echo "构建 docker build --network host -t ${PN}:${PV} ${FS}"
+    # docker build --network host -t ${PN}:${PV} ${FS}
+    echo ""
 }
 
 
 function setup_use {
-    echo "========== setup_use =========="
+    func_title
+    if [[ ! -n "${USE}" ]]; then
+        echo -e "USE 未设置，跳过 ... \n"
+        return
+    fi
     for use in ${USE}; do
-        case $use in
+        case "$use" in
         "wayland")
             RUN_OPTIONS+=("-e WAYLAND_DISPLAY=$WAYLAND_DISPLAY")
-            echo $use
+            ;;
+        "dri")
+            RUN_OPTIONS+=("--device /dev/dri")
+            ;;
+        "dbus")
+            RUN_OPTIONS+=("-e DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS -e XDG_RUNTIME_DIR=/run/user/${CUID} -v /run/user/${UID}:/run/user/${CUID} -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket")
+            ;;
+        "x11")
+            RUN_OPTIONS+=("-e DISPLAY=:0 -e GTK_IM_MODULE=fcitx -e QT_IM_MODULE=fcitx -e XMODIFIERS=@im=fcitx -e GLFW_IM_MODULE=ibus")
+            DEP+=" fcitx5-frontend-gtk2 fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-frontend-qt6"
             ;;
         "net-host")
             RUN_OPTIONS+=("--network host")
-            echo $use
+            ;;
+        "privileged")
+            RUN_OPTIONS+=("--privileged")
+            ;;
+        "map-tmp")
+            RUN_OPTIONS+=("-v /tmp:/tmp")
+            ;;
+        "map-home")
+            RUN_OPTIONS+=("-v ${PH}:/home/${CUSER}")
+            if [[ ! -e ${PH} ]]; then mkdir -p ${PH}; fi
+            ;;
+        "map-fonts")
+            RUN_OPTIONS+=("-v ${HOME}/.fonts:/home/${CUSER}/.fonts:ro")
+            ;;
+        --*)
+            RUN_OPTIONS+=("$use")
+            ;;
+        --*=*)
+            RUN_OPTIONS+=("$use")
+            ;;
+        *=*)
+            RUN_OPTIONS+=("--$use")
             ;;
         *)
             echo "未识别：$use"
+            exit 1
             ;;
         esac
+        printf "%-15s: %s\n" $use "${RUN_OPTIONS[-1]}"
     done
     echo ""
 }
 
 
-function check_options {
-    echo "========== check_options =========="
-    echo "运行参数：${RUN_OPTIONS[@]}"
-    echo ""
+
+function docker_run {
+    func_title
+    echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV}"
+}
+
+
+
+
+
+
+function func_title {
+    echo -e "\e[35;1m[ ${FUNCNAME[1]} ]\e[0m"
+}
+
+function clog {
+    local RESET="\e[0m"
+    local RED="\e[31m"
+    local GREEN="\e[32m"
+    local YELLOW="\e[33m"
+    local BLUE="\e[34m"
+    local MAGENTA="\e[35m"
+    local CYAN="\e[36m"
+    local WHITE="\e[37m"
+    if $DEBUG; then
+        echo -e "${YELLOW}$1${RESET}"
+    fi
 }
