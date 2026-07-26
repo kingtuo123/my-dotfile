@@ -19,44 +19,8 @@ function main {
     create_dockerfile
     docker_build
     docker_run
-
-
-
-#    case "${ARG[0]}" in
-#        "install")
-#            if [[ -n "${ARG[1]}" ]]; then
-#                PN=${ARG[1]}
-#                init
-#                read_package_sh
-#                setup_use
-#                fetch_package
-#                create_dockerfile
-#                docker_build
-#            else
-#                echo "请指定包名"
-#                exit 1
-#            fi
-#            ;;
-#        "run")
-#            if [[ -n "${ARG[1]}" ]]; then
-#                PN=${ARG[1]}
-#                init
-#                read_package_sh
-#                setup_use
-#                docker_run
-#            else
-#                echo "请指定包名"
-#                exit 1
-#            fi
-#            ;;
-#        "")
-#            echo "请使用命令：install，run"
-#            ;;
-#        *)
-#            echo "不支持的命令"
-#            ;;
-#    esac
 }
+
 
 
 
@@ -64,7 +28,7 @@ function main {
 function init {
     func_title
 
-    IMG=debian:trixie
+    IMG=debian-base:9999
     CUSER=$USER
     CUID=$UID
     CPKG_REPO_PATH=${HOME}/Desktop/repo
@@ -83,6 +47,7 @@ function init {
 
 
 
+
 function read_package_sh {
     func_title
     if [[ ! -e ${CPKG_REPO_PATH}/${PN} ]]; then
@@ -95,7 +60,6 @@ function read_package_sh {
     else
         SH=$(dir -1 ${CPKG_REPO_PATH}/$PN/*.sh | sort -V | tail -n1)
     fi
-
 
     PF=$(basename ${SH%.*})
     PV=${PF##*-}
@@ -110,15 +74,21 @@ function read_package_sh {
     echo "PF  = $PF"
     echo "FS  = ${CPKG_REPO_PATH}/${PN}/files"
     echo "PH  = $PH"
+    echo "IMG = $IMG"
     echo "USE = $USE"
     echo "DEP = $DEP"
     echo "SRC = ${SRC}"
 
+    if [[ ! -e ${FS} ]]; then
+        mkdir -p ${FS}
+    fi
     is_container_running=$(docker container ls --filter name=${PN} --quiet)
     is_image_exist=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "${PN}:${PV}")
 
     echo ""
 }
+
+
 
 
 
@@ -131,9 +101,6 @@ function fetch_package {
     if [[ ! -n "${SRC}" ]]; then
         echo -e "SRC 未设置，跳过 ... \n"
         return
-    fi
-    if [[ ! -e ${FS} ]]; then
-        mkdir -p ${FS}
     fi
     LINK=("${SRC}")
     for i in "${!LINK[@]}"; do
@@ -148,12 +115,17 @@ function fetch_package {
     for i in "${!LINK[@]}"; do
         if [[ ! -e "${FS}/${LINK[$i]##*/}" ]]; then
             echo "获取 ${LINK[$i]} -> ${LINK[$i]##*/}"
+            curl -L ${LINK[$i]} -o ${FS}/${LINK[$i]##*/}
         else
             echo "已存在 ${LINK[$i]##*/}，跳过 ..."
         fi
     done
     echo ""
 }
+
+
+
+
 
 function create_dockerfile {
     func_title
@@ -167,20 +139,24 @@ FROM ${IMG}
 
 ARG BUILD_DEP=${DEP}
 ARG BUILD_PKG=$(echo ${PKG[@]})
+ARG BUILD_USER=${CUSER}
+ARG BUILD_UID=${CUID}
 ARG http_proxy=${http_proxy}
 ARG https_proxy=${https_proxy}
+
+ENV BUILD_IMG=${PN}:${PV}
 
 USER root
 WORKDIR /root
 
-RUN --mount=type=bind,source=${FS},target=/root/files \
+SHELL ["/bin/bash", "-c"]
+RUN --mount=type=bind,source=./files,target=/root/files \
 cd /root/files && \
-source build_*.sh && \
-build_prepare && \
-build_depend && \
-build_package && \
-build_config && \
-build_finish
+source build_prepare.sh && build_prepare && \
+source build_depend.sh  && build_depend && \
+source build_package.sh && build_package && \
+source build_config.sh  && build_config && \
+source build_finish.sh  && build_finish
 
 USER ${CUSER}
 WORKDIR /home/${CUSER}
@@ -216,6 +192,9 @@ function build_finish {
 }
 
 
+
+
+
 function docker_build {
     func_title
     if [[ -n "$is_image_exist" ]]; then
@@ -229,9 +208,12 @@ function docker_build {
         echo -e "\e[30m$(cat ${FS}/${func}.sh)\e[0m"
     done
     echo "构建 docker build --network host -t ${PN}:${PV} ${FS}"
-    # docker build --network host -t ${PN}:${PV} ${FS}
+    docker build --network host -t ${PN}:${PV} -f ${FS}/dockerfile ${CPKG_REPO_PATH}/${PN}
     echo ""
 }
+
+
+
 
 
 function setup_use {
@@ -261,14 +243,17 @@ function setup_use {
         "privileged")
             RUN_OPTIONS+=("--privileged")
             ;;
-        "map-tmp")
+        "machine-id")
+            RUN_OPTIONS+=("-v /etc/machine-id:/etc/machine-id:ro")
+            ;;
+        "tmp")
             RUN_OPTIONS+=("-v /tmp:/tmp")
             ;;
-        "map-home")
+        "home")
             RUN_OPTIONS+=("-v ${PH}:/home/${CUSER}")
             if [[ ! -e ${PH} ]]; then mkdir -p ${PH}; fi
             ;;
-        "map-fonts")
+        "fonts")
             RUN_OPTIONS+=("-v ${HOME}/.fonts:/home/${CUSER}/.fonts:ro")
             ;;
         --*)
@@ -292,11 +277,14 @@ function setup_use {
 
 
 
+
+
 function docker_run {
     func_title
     if [[ -n "$is_container_running" ]]; then
         if [[ "${ARG[1]}" == "bash" ]]; then
-            echo "docker exec -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            echo "docker exec -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            docker exec -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
             return
         else
             echo -e "容器 ${PN} 运行中，停止容器 ... \n"
@@ -306,13 +294,14 @@ function docker_run {
         fi
     else
         if [[ "${ARG[1]}" == "bash" ]]; then
-            echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            echo "docker run -it --rm  --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            docker run -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
             return
         fi
     fi
-    echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}"
+    echo "docker run -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}"
+    docker run -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}
 }
-
 
 
 
