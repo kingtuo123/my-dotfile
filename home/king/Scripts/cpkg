@@ -31,7 +31,7 @@ function init {
     IMG=debian-base:9999
     CUSER=$USER
     CUID=$UID
-    CPKG_REPO_PATH=${HOME}/Desktop/repo
+    CPKG_REPO_PATH=${HOME}/.config/repo
     CPKG_HOME_PATH=${HOME}/Desktop/container
 
     if [[ ! -e "$CPKG_HOME_PATH" ]]; then
