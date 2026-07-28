@@ -296,8 +296,8 @@ function docker_run {
     fi
     if [[ -n "$is_container_running" ]]; then
         if [[ "${ARG[1]}" == "bash" ]]; then
-            echo "docker exec -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
-            docker exec -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
+            echo "docker exec -it ${PN} bash"
+            docker exec -it ${PN} bash
             return
         else
             echo -e "容器 ${PN} 运行中，停止容器 ... \n"
