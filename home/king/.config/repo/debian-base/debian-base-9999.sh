@@ -2,7 +2,7 @@
 
 IMG="debian:trixie"
 
-USE="wayland dbus dri machine-id net-host tmp home fonts"
+USE="rm wayland dbus dri machine-id net-host tmp home fonts"
 
 SRC=""
 

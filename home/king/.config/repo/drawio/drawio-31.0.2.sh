@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USE="wayland dbus dri machine-id net-host tmp home fonts shm-size=2g cap-add=SYS_ADMIN"
+USE="rm wayland dbus dri machine-id net-host tmp home fonts shm-size=2g cap-add=SYS_ADMIN"
 
 SRC="https://github.com/jgraph/drawio-desktop/releases/download/v${PV}/drawio-amd64-${PV}.deb"
 

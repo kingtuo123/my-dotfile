@@ -224,6 +224,9 @@ function setup_use {
     fi
     for use in ${USE}; do
         case "$use" in
+        "rm")
+            RUN_OPTIONS+=("--rm")
+            ;;
         "wayland")
             RUN_OPTIONS+=("-e WAYLAND_DISPLAY=$WAYLAND_DISPLAY")
             ;;
@@ -239,6 +242,9 @@ function setup_use {
             ;;
         "net-host")
             RUN_OPTIONS+=("--network host")
+            ;;
+        "net-none")
+            RUN_OPTIONS+=("--network none")
             ;;
         "privileged")
             RUN_OPTIONS+=("--privileged")
@@ -272,6 +278,8 @@ function setup_use {
         esac
         printf "%-15s: %s\n" $use "${RUN_OPTIONS[-1]}"
     done
+    # 默认设置
+    RUN_OPTIONS+=("-e LANG=C.UTF-8 -e LC_ALL=C.UTF-8")
     echo ""
 }
 
@@ -281,10 +289,15 @@ function setup_use {
 
 function docker_run {
     func_title
+    is_image_exist=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "${PN}:${PV}")
+    if [[ -z "$is_image_exist" ]]; then
+        echo -e "镜像 ${PN}:${PV} 不存在，跳过 ... \n"
+        return
+    fi
     if [[ -n "$is_container_running" ]]; then
         if [[ "${ARG[1]}" == "bash" ]]; then
-            echo "docker exec -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
-            docker exec -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
+            echo "docker exec -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            docker exec -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
             return
         else
             echo -e "容器 ${PN} 运行中，停止容器 ... \n"
@@ -294,13 +307,13 @@ function docker_run {
         fi
     else
         if [[ "${ARG[1]}" == "bash" ]]; then
-            echo "docker run -it --rm  --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
-            docker run -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
+            echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
+            docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
             return
         fi
     fi
-    echo "docker run -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}"
-    docker run -it --rm --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}
+    echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}"
+    docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}
 }
 
 
