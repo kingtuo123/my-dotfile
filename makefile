@@ -60,5 +60,5 @@ $(removed): %: $(CURDIR)%
 
 git:
 	@git add -A
-	@git diff --cached --quiet || git commit -m "backup: $$(date +'%F %T')"
+	@git diff --staged --quiet || git commit -m "backup: $$(date +'%F %T')"
 	@git push
