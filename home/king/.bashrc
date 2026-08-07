@@ -112,6 +112,8 @@ bind 'set show-all-if-ambiguous on'
 bind 'set menu-complete-display-prefix on'
 bind 'set completion-ignore-case on'
 bind 'TAB: menu-complete'
+
+# Alt + t 执行命令
 bind -x '"\et":"t"'
 
 
@@ -124,7 +126,6 @@ case "$TERM" in
                 echo -ne "\033]0;${USER:-bash} @ $(dirs)\007"
             elif [[ -n "$BASH_COMMAND" ]]; then
                 echo -ne "\033]0;${BASH_COMMAND}\007"
-                history -w
             fi
         }
         trap 'set_title' DEBUG

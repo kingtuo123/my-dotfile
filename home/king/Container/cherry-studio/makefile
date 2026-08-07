@@ -1,6 +1,6 @@
 image_name         := cherry-studio
 
-version            := 1.9.12
+version            := 1.9.13
 
 deb_src            := https://github.com/CherryHQ/cherry-studio/releases/download/v$(version)/Cherry-Studio-$(version)-amd64.deb
 

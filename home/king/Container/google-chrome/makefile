@@ -1,6 +1,6 @@
 image_name         := google-chrome
 
-version            := 148.0.7778.215
+version            := 150.0.7871.181
 
 deb_src            := https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_$(version)-1_amd64.deb
 

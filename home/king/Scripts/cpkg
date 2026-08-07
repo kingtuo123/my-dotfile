@@ -145,6 +145,8 @@ ARG http_proxy=${http_proxy}
 ARG https_proxy=${https_proxy}
 
 ENV BUILD_IMG=${PN}:${PV}
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 USER root
 WORKDIR /root
@@ -278,8 +280,6 @@ function setup_use {
         esac
         printf "%-15s: %s\n" $use "${RUN_OPTIONS[-1]}"
     done
-    # 默认设置
-    RUN_OPTIONS+=("-e LANG=C.UTF-8 -e LC_ALL=C.UTF-8")
     echo ""
 }
 
