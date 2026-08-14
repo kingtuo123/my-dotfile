@@ -6,7 +6,7 @@ USE="rm wayland dbus dri machine-id net-host tmp home fonts"
 
 SRC=""
 
-DEP="sudo xwayland pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei bash-completion"
+DEP="sudo xwayland pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei bash-completion foot"
 
 CMD="/bin/bash"
 

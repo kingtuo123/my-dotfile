@@ -1,8 +1,13 @@
 #!/bin/bash
+set -e
+
 
 trap main EXIT
 
+
 ARG=($@)
+DEBUG=true
+
 
 function main {
     if [[ -n "${ARG[0]}" ]]; then
@@ -210,7 +215,9 @@ function docker_build {
         echo -e "\e[30m$(cat ${FS}/${func}.sh)\e[0m"
     done
     echo "构建 docker build --network host -t ${PN}:${PV} ${FS}"
-    docker build --network host -t ${PN}:${PV} -f ${FS}/dockerfile ${CPKG_REPO_PATH}/${PN}
+    if ! ${DEBUG}; then
+        docker build --network host -t ${PN}:${PV} -f ${FS}/dockerfile ${CPKG_REPO_PATH}/${PN}
+    fi
     echo ""
 }
 
@@ -308,12 +315,16 @@ function docker_run {
     else
         if [[ "${ARG[1]}" == "bash" ]]; then
             echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash"
-            docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
+            if ! ${DEBUG}; then
+                docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} bash
+            fi
             return
         fi
     fi
     echo "docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}"
-    docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}
+    if ! ${DEBUG}; then
+        docker run -it --name ${PN} ${RUN_OPTIONS[@]} ${PN}:${PV} ${CMD}
+    fi
 }
 
 
