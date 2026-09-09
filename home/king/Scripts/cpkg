@@ -6,7 +6,7 @@ trap main EXIT
 
 
 ARG=($@)
-DEBUG=true
+DEBUG=false
 
 
 function main {
@@ -231,11 +231,9 @@ function setup_use {
         echo -e "USE 未设置，跳过 ... \n"
         return
     fi
+    RUN_OPTIONS+=("--rm")
     for use in ${USE}; do
         case "$use" in
-        "rm")
-            RUN_OPTIONS+=("--rm")
-            ;;
         "wayland")
             RUN_OPTIONS+=("-e WAYLAND_DISPLAY=$WAYLAND_DISPLAY")
             ;;

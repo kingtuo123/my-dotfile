@@ -25,7 +25,7 @@ required_packages := sudo xwayland pciutils mesa-utils pipewire-audio fonts-deja
 # 容器运行参数
 run_args += --rm
 run_args += --name $(container_name)
-#run_args += --privileged
+run_args += --privileged
 run_args += --network host
 run_args += -e IMAGE_NAME=$(image_name):$(version)
 run_args += -e WAYLAND_DISPLAY=$$WAYLAND_DISPLAY

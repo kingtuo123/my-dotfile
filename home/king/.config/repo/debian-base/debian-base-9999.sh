@@ -2,11 +2,11 @@
 
 IMG="debian:trixie"
 
-USE="rm wayland dbus dri machine-id net-host tmp home fonts"
+USE="wayland dbus dri machine-id net-host tmp home fonts"
 
 SRC=""
 
-DEP="sudo xwayland pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei bash-completion foot"
+DEP="sudo pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei foot"
 
 CMD="/bin/bash"
 
@@ -71,6 +71,7 @@ EOF
 
     useradd -m -s /bin/bash -u ${BUILD_UID} ${BUILD_USER}
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+    dpkg --add-architecture i386
     apt update
 }
 

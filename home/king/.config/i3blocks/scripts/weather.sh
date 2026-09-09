@@ -1,7 +1,7 @@
 #!/bin/bash
 
 key=$(cat ~/.config/amap/key)
-city=330382
+city=330324
 
 until data=$(curl -sS --connect-timeout 5 "https://restapi.amap.com/v3/weather/weatherInfo?key=$key&city=$city"); do
 	sleep 5
