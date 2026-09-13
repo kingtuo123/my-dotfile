@@ -62,6 +62,7 @@ alias sim="bash -c 'swaymsg splitv && swayimg -g && swaymsg split none &'"
 alias t="bash -c 'swaymsg splitv && foot -D \$PWD &>/dev/null && swaymsg split none &>/dev/null &'"
 alias b="cd ~/Github/blog"
 alias k="cd ~/Github/kingtuo123.github.io"
+alias mhz="watch -n1 'grep -i Mhz /proc/cpuinfo | sort -nr -t: -k2'"
 
 
 

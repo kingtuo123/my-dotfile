@@ -19,3 +19,7 @@ app-emulation/virt-viewer   -* -libvirt spice
 net-firewall/nftables    json
 
 net-firewall/iptables    nftables
+
+
+# HDMI 控制显示器亮度软件。usb-monitor：usb 支持；user-permissions：非 root 用户访问 /dev/i2c-* 权限。
+app-misc/ddcutil    user-permissions

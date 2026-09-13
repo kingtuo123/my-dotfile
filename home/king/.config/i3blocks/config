@@ -43,6 +43,11 @@ format=json
 interval=persist
 
 
+[brightness]
+command=scripts/brightness.sh
+interval=300
+
+
 [volume]
 command=scripts/volume.sh
 format=json
