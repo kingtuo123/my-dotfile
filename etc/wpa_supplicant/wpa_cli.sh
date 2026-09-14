@@ -22,8 +22,7 @@ case ${ACTION} in
 	CONNECTED)
 		/usr/bin/pkill -SIGRTMIN+5 i3blocks
 		logger -t wpa_cli "CONNECTED: pkill -SIGRTMIN+5 i3blocks"
-		exit 0
-		#EXEC="${EXEC} start"
+		EXEC="${EXEC} start"
 		;;
 	DISCONNECTED)
 		/usr/bin/pkill -SIGRTMIN+5 i3blocks
