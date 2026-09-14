@@ -10,8 +10,6 @@ case $button in
             if [[ -n "$selectedNetwork" ]]; then
                 num=$(echo $selectedNetwork | cut -d ' ' -f1)
                 wpa_cli select_network $num &> /dev/null
-                printf '{"full_text":"   无线网  --   ", "color":"#d3c6aa"}\n'
-                exit 0
             fi
         fi
         ;;

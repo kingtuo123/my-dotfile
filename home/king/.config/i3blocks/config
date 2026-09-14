@@ -22,6 +22,11 @@ signal=5
 interval=900
 
 
+[upload]
+command=scripts/upload.sh
+interval=persist
+
+
 [download]
 command=scripts/download.sh
 interval=persist
