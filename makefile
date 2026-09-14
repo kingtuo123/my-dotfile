@@ -4,6 +4,7 @@ SHELL=/usr/bin/bash
 
 
 origins := /etc/udev/rules.d/*.rules
+origins += /etc/wpa_supplicant/wpa_cli.sh
 origins += /etc/fstab
 origins += /etc/local.d/*.start
 origins += /etc/portage/make.conf

@@ -15,6 +15,13 @@ format=json
 interval=900
 
 
+[wifi]
+command=scripts/wifi.sh
+format=json
+signal=5
+interval=900
+
+
 [download]
 command=scripts/download.sh
 interval=persist
