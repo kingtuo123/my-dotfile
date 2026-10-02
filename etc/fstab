@@ -1,0 +1,3 @@
+UUID=173a29e5-2f3e-444e-b710-afcc0dcdb43a	/	ext4	noatime	0 1
+UUID=624e403a-db9c-40ba-81a8-49d641a110aa	/home	ext4	noatime 0 2
+UUID=7C95-D63F	/boot/efi	vfat	defaults,noatime	0 3

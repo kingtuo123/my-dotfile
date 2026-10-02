@@ -1,0 +1,6 @@
+iptables -I DOCKER-USER -i incusbr0 -j ACCEPT
+iptables -I DOCKER-USER -o incusbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+
+iptables -I DOCKER-USER -i incusbr-1000 -j ACCEPT
+iptables -I DOCKER-USER -o incusbr-1000 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
