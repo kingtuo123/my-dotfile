@@ -1,0 +1,28 @@
+FROM debian:trixie
+
+ARG USER=debian
+ARG UID=1000
+ARG PKG="sudo locales-all pciutils mesa-utils pipewire-audio fonts-dejavu fonts-wqy-microhei foot bash-completion"
+
+COPY debian.sources /etc/apt/sources.list.d/debian.sources
+
+RUN useradd -m -s /bin/bash -u ${UID} ${USER} \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && sed -i 's|https://|http://|g' /etc/apt/sources.list.d/debian.sources \
+    && apt update \
+    && apt-get install -y ca-certificates \
+    && sed -i 's|http://|https://|g' /etc/apt/sources.list.d/debian.sources \
+    && apt install -y ${PKG} \
+    && echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
+    && apt clean
+
+COPY bash.bashrc /etc/bash.bashrc
+
+STOPSIGNAL SIGKILL
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV XDG_RUNTIME_DIR=/run/user/${UID}
+USER ${USER}
+WORKDIR /home/${USER}
+
+CMD [ "bash" ]

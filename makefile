@@ -25,8 +25,8 @@ origins += ~/.config/nvim
 origins += ~/.config/rofi
 origins += ~/.config/sway
 origins += ~/.config/swayimg
-origins += ~/.config/repo
 origins += ~/.docker/config.json
+origins += ~/.local/share/applications/*.desktop
 
 
 

@@ -1,0 +1,16 @@
+FROM debian-base:latest
+
+ARG PKG="libnss3"
+
+USER root
+WORKDIR /root
+
+RUN --mount=type=bind,source=./distdir,target=/root/distdir \
+    apt install -y /root/distdir/*.deb \
+    && apt install -y ${PKG} \
+    && apt clean
+
+USER debian
+WORKDIR /home/debian
+
+CMD [ "wechat" ]

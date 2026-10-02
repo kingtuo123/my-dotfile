@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Exec=make -C ~/Container/cherry-studio
+Name=Cherry-studio

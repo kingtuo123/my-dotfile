@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Exec=incus exec my-debian13-cloud -- su - debian -c clash-verge
+Name=Clash

@@ -1,0 +1,249 @@
+/* ------------------------------------------- */
+/*                 1. 根变量定义                */
+/* ------------------------------------------- */
+
+:root {
+    /* -- 结构与动效 -- */
+    --everforest-radius-medium: 12px;
+    --everforest-radius-small: 8px;
+    --everforest-transition: 0.25s ease-in-out;
+    --aurora-primary: #10b981;
+}
+
+/* ------------------------------------------- */
+/*            2. 亮色主题 (Light Mode)         */
+/* ------------------------------------------- */
+
+body[theme-mode="light"] {
+    /* -- Everforest 基础颜色 -- */
+    --color-red: #f85552;
+    --color-orange: #f57d26;
+    --color-yellow: #dfa000;
+    --color-green: #8da101;
+    --color-cyan: #35a77c;
+    --color-blue: #3795C5;
+    --color-purple: #df69ba;
+
+    /* -- Everforest 语义颜色映射到 CherryStudio -- */
+    /* 背景颜色系统 */
+    --color-background: #fdf6e3;
+    /* --bg1: 主背景色 */
+    --color-background-soft: #efebd4;
+    /* --bg2: 次背景色，用于用户消息、面板 */
+    --color-background-mute: rgba(226, 222, 198, .5);
+    /* --bg3: 第三背景色，用于悬浮元素 */
+
+    /* 文本颜色层次 */
+    --color-text: #5C6A72;
+    /* --tx1: 主文本 */
+    --color-text-secondary: #829181;
+    /* --tx2: 次要文本 */
+    --color-text-placeholder: #a6b0a0;
+    /* --tx3: 辅助文本 */
+
+    /* 界面元素颜色 */
+    --color-border: #e0dcc7;
+    /* --ui1: 边框 */
+    --color-border-soft: #e0dcc7;
+    --color-ui-element: #bec5b2;
+    /* --ui2: 按钮、输入框 */
+
+    /* CherryStudio 核心组件颜色 */
+    --color-primary: var(--color-green);
+    --color-primary-soft: rgba(141, 161, 1, 0.6);
+    --color-primary-mute: rgba(141, 161, 1, 0.2);
+    --color-link: var(--color-blue);
+    --color-error: var(--color-red);
+
+    /* 聊天与输入框 */
+    --navbar-background: var(--color-background);
+    --chat-background: var(--color-background);
+    --chat-background-user: var(--color-background-soft);
+    --chat-background-assistant: var(--color-background);
+    --chat-text-user: var(--color-text);
+    --input-background: #FFFFFF;
+    /* 输入框使用更纯净的白色以区分 */
+    --input-container-background: var(--color-background);
+
+    /* 代码与高亮 */
+    --color-code-background: var(--color-background-soft);
+    --color-code-text: var(--color-orange);
+    --selection-background: rgba(198, 214, 152, .4);
+    /* --hl1 */
+}
+
+
+/* ------------------------------------------- */
+/*            3. 暗色主题 (Dark Mode)          */
+/* ------------------------------------------- */
+
+body[theme-mode="dark"] {
+
+    /* -- Everforest 基础颜色 -- */
+    --color-red: #e67e80;
+    --color-orange: #e69875;
+    --color-yellow: #dbbc7f;
+    --color-green: #a7c080;
+    --color-cyan: #83c092;
+    --color-blue: #7fbbb3;
+    --color-purple: #d699b6;
+
+    /* -- Everforest 语义颜色映射到 CherryStudio -- */
+    /* 背景颜色系统 */
+    --color-background: #2d353b;
+    /* --bg1: 主背景色 */
+    --color-background-soft: #283035;
+    /* --bg2: 次背景色，用于用户消息、面板 */
+    --color-background-mute: rgba(35, 42, 46, 0.5);
+    /* --bg3: 第三背景色，用于悬浮元素 */
+
+    /* 文本颜色层次 */
+    --color-text: #d3c6aa;
+    /* --tx1: 主文本 */
+    --color-text-secondary: #9da9a0;
+    /* --tx2: 次要文本 */
+    --color-text-placeholder: #7a8478;
+    /* --tx3: 辅助文本 */
+
+    /* 界面元素颜色 */
+    --color-border: #475258;
+    /* --ui1: 边框 */
+    --color-border-soft: #475258;
+    --color-ui-element: #4f585e;
+    /* --ui2: 按钮、输入框 */
+
+    /* CherryStudio 核心组件颜色 */
+    --color-primary: var(--color-green);
+    --color-primary-soft: rgba(167, 192, 128, 0.6);
+    --color-primary-mute: rgba(167, 192, 128, 0.2);
+    --color-link: var(--color-blue);
+    --color-error: var(--color-red);
+
+    /* 聊天与输入框 */
+    --navbar-background: var(--color-background);
+    --chat-background: var(--color-background);
+    --chat-background-user: var(--color-background-soft);
+    --chat-background-assistant: var(--color-background);
+    --chat-text-user: var(--color-text);
+    --input-background: var(--color-background-soft);
+    --input-container-background: var(--color-background);
+
+    /* 代码与高亮 */
+    --color-code-background: var(--color-background-soft);
+    --color-code-text: var(--color-orange);
+    --selection-background: rgba(134, 70, 93, .5);
+    /* --hl1 */
+
+
+}
+
+
+
+/* ------------------------------------------- */
+/*               5. 核心组件样式               */
+/* ------------------------------------------- */
+
+/* 消息气泡样式 - CherryStudio 聊天界面核心样式 */
+/* -- 消息气泡 -- */
+.message-content-container {
+    background: var(--chat-background-assistant) !important;
+    padding: 16px 20px !important;
+    border-radius: var(--everforest-radius-medium) !important;
+    border: 1px solid var(--color-border) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+
+
+
+
+
+/* ------------------------------------------- */
+/*               6. Markdown 样式              */
+/* ------------------------------------------- */
+
+/* Markdown 容器基础样式 */
+.markdown {
+    color: var(--color-text) !important;
+}
+
+/* 各级标题字体颜色 - 使用 Everforest 彩虹色彩系统 */
+/* 一级标题 - 红色系 */
+.markdown h1 {
+    color: var(--color-red) !important;
+    font-size: 1.8em;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 二级标题 - 橙色系 */
+.markdown h2 {
+    color: var(--color-orange) !important;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 三级标题 - 黄色系 */
+.markdown h3 {
+    color: var(--color-yellow) !important;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 四级标题 - 绿色系 */
+.markdown h4 {
+    color: var(--color-green) !important;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 五级标题 - 蓝色系 */
+.markdown h5 {
+    color: var(--color-blue) !important;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 六级标题 - 紫色系 */
+.markdown h6 {
+    color: var(--color-purple) !important;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 文本格式化样式 */
+/* 加粗文本 */
+.markdown strong {
+    color: #B55A5A !important;
+    font-weight: bold;
+}
+
+/* 斜体文本 */
+.markdown em {
+    color: var(--color-text-secondary) !important;
+    font-style: italic;
+}
+
+/* 链接样式 - 可删除以使用简单链接样式 */
+.markdown a {
+    color: var(--color-link) !important;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-primary-mute);
+}
+
+
+
+/* 引用块样式 - 可删除以使用简单引用样式 */
+.markdown blockquote {
+    padding: 1rem 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    background-color: var(--color-background-soft) !important;
+    border-left: 4px solid var(--color-ui-element) !important;
+    border-radius: var(--everforest-radius-small) !important;
+}

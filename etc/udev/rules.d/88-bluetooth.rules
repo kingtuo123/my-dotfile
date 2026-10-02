@@ -1,0 +1,4 @@
+# 当蓝牙设备连接时触发
+ACTION=="add", SUBSYSTEM=="bluetooth", RUN+="/usr/bin/su king /home/king/.config/sway/scripts/bluetooth-connected.sh"
+# 当蓝牙设备断开时触发
+ACTION=="remove", SUBSYSTEM=="bluetooth", RUN+="/usr/bin/su king /home/king/.config/sway/scripts/bluetooth-disconnected.sh"

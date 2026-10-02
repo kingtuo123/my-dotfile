@@ -1,0 +1,13 @@
+FROM debian-base:latest
+
+USER root
+WORKDIR /root
+
+RUN --mount=type=bind,source=./distdir,target=/root/distdir \
+    apt install -y /root/distdir/*.deb \
+    && apt clean
+
+USER debian
+WORKDIR /home/debian
+
+CMD [ "bash" ]

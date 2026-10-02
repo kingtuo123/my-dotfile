@@ -1,0 +1,9 @@
+configuration {
+    modes: "drun";
+    threads: 8;
+    kb-cancel: "Escape,MouseSecondary";
+}
+
+@theme "everforest"
+
+
