@@ -1,6 +1,6 @@
-PN  := mihomo
-PV  := 2.0.3
-URI := https://github.com/mihomo-party-org/clash-party/releases/download/v$(PV)/clash-party-linux-$(PV)-amd64.deb
+PN  := googlel-chrome
+PV  := 153.0.8010.36
+URI := https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_$(PV)-1_amd64.deb
 
 
 # must required
@@ -18,7 +18,7 @@ OPT += -v /run/user/1000/bus:/run/user/1000/bus
 OPT += -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 # optional
 OPT += -v /etc/machine-id:/etc/machine-id
-OPT += -v /run/user/1000/dconf:/run/user/1000/dconf
+OPT += -v /tmp/dconf:/run/user/1000/dconf
 OPT += --device /dev/dri
 OPT += --shm-size=1g
 OPT += --cap-add=SYS_ADMIN
@@ -28,11 +28,11 @@ OPT += -v ~/.fonts:/home/debian/.fonts
 
 
 .SILENT:
-run: homedir
+run: homedir /tmp/dconf
 	docker run --rm  -d --name $(PN) $(OPT) $(PN):$(PV)
 
 
-bash: homedir
+bash: homedir /tmp/dconf
 	docker run --rm -it --name $(PN) $(OPT) $(PN):$(PV) bash
 
 
@@ -45,4 +45,7 @@ fetch:
 
 
 homedir:
+	mkdir -p $@
+
+/tmp/dconf:
 	mkdir -p $@

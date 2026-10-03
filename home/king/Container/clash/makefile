@@ -1,5 +1,5 @@
 PN  := clash
-PV  := 2.5.6
+PV  := 2.5.7
 URI := https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v$(PV)/Clash.Verge_$(PV)_amd64.deb
 
 
@@ -13,6 +13,7 @@ OPT += -v /run/user/1000/wayland-1:/run/user/1000/wayland-1
 OPT += -v /run/user/1000/pipewire-0:/run/user/1000/pipewire-0
 OPT += -v /run/user/1000/pulse/native:/run/user/1000/pulse/native
 # dbus
+OPT += -e DBUS_SESSION_BUS_ADDRESS=$$DBUS_SESSION_BUS_ADDRESS
 OPT += -v /run/user/1000/bus:/run/user/1000/bus
 OPT += -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 # optional

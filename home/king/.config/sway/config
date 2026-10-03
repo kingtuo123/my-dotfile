@@ -47,6 +47,7 @@ set $ws9         9:九
 set $ws10        10:十
 set $ws-music    11:[音乐]
 set $ws-proxy    12:[代理]
+set $ws-wechat   13:[微信]
 set $term        foot
 set $f_term      $term --title=floating-terminal
 set $d_term      $term --title=dropdown-terminal
@@ -210,6 +211,8 @@ assign     [ app_id = "clash-verge"                ] workspace $ws-proxy
 for_window [ app_id = "com.follow.clash"           ] floating enable
 assign     [ app_id = "com.follow.clash"           ] workspace $ws-proxy
 for_window [ app_id = "remote-viewer"              ] floating enable
+for_window [ app_id = "wechat"                     ] floating enable
+assign     [ app_id = "wechat"                     ] workspace $ws-wechat
 
 
 
