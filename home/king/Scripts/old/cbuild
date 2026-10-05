@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e    # 任何命令返回非0状态就退出脚本
+
+PN="clash"
+PV="2.5.6"
+DISTDIR="distdir"
+HOMEDIR="homedir"
+SRC_URI="https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v${PV}/Clash.Verge_${PV}_amd64.deb"
+
+
+function pkg_fetch(){
+
+}

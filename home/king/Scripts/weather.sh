@@ -1,6 +1,6 @@
 #!/bin/bash
 
-location="Yueqing"
+location="Yongjia"
 
 if [[ $1 == 'h' ]];then
 	curl "wttr.in/:help" 
