@@ -73,7 +73,7 @@ alias mpv-novideo='mpv --no-video --force-window=no --loop-file=inf'
 function pon(){
 	history -w
 	(
-		proxy='http://192.168.20.100:7897'
+		proxy='http://192.168.20.120:7890'
 		http_proxy=$proxy https_proxy=$proxy RSYNC_PROXY=$proxy bash
 	)
 	history -r
