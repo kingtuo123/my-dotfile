@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #  ddcutil probe 查询显示器可用代码，输出如下：
 #  Feature x0b - Color temperature increment
@@ -33,12 +33,12 @@
 #  Feature xe6 - Manufacturer Specific
 
 
-case $button in
+case ${button} in
     3)
-        rofiTheme="window { border-radius:0px; location: northeast; x-offset: -320px; y-offset: 0px; width: 50px; } inputbar { enabled: false; } element-text { padding:5px; }"
-        selectedBrightness=$(printf '%d\n' {10..100..10} | rofi -dmenu -theme-str "$rofiTheme" -l 10)
-        if [[ -n $selectedBrightness ]]; then
-            ddcutil setvcp 10 $selectedBrightness
+        rofiTheme="window{ border-radius:0px; location: northeast; x-offset: -320px; y-offset: 0px; width: 50px; } inputbar { enabled: false; } element-text { padding:5px; }"
+        selectedBrightness=$(printf '%d\n' {10..100..10} | rofi -dmenu -theme-str "${rofiTheme}" -l 10)
+        if [[ -n ${selectedBrightness} ]]; then
+            ddcutil setvcp 10 ${selectedBrightness}
         fi
         ;;
     # 4) ddcutil setvcp 10 + 5 ;;
@@ -51,4 +51,4 @@ esac
 brightness=$(ddcutil getvcp 10 | grep -Po '[0-9]*(?=,)')
 
 
-printf '   亮度  %s%%   \n' $brightness
+printf '   亮度  %s%%   \n' "${brightness}"

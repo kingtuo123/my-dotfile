@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-case $button in
+case ${button} in
 	3) 
-		rofiTheme="window { border-radius:0px; location: northeast; x-offset: 0px; y-offset: 0px; width: 30%; } inputbar { enabled: false; } element-text { padding:5px; }"
+		rofiTheme="window{ border-radius:0px; location: northeast; x-offset: 0px; y-offset: 0px; width: 30%; } inputbar { enabled: false; } element-text { padding:5px; }"
 		defaultSink=$(pactl get-default-sink)
 		sinks=($(pactl list sinks short | cut -f2))
 		for i in "${!sinks[@]}";do

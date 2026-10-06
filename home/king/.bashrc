@@ -1,16 +1,8 @@
-# 如果当前 shell 不是交互式（interactive）的，就直接返回，否则加载 fzf
+# 如果当前 shell 不是交互式（interactive）的，就直接返回
 if [[ $- != *i* ]] ; then
     return
-else
-    if [[ -x "/usr/bin/fzf" ]]; then
-        # Ctrl + R：模糊搜索历史命令
-        # Ctrl + T：模糊选择文件路径，直接粘贴到当前命令行
-        # Alt + C：模糊选择目录并直接 cd 进入
-        # 配合 ** 补全：输入 vim **<Tab>，会弹出 fzf 界面让你搜索文件再打开
-        # 变量置空，仅使用历史搜索命令
-        FZF_CTRL_T_COMMAND= FZF_ALT_C_COMMAND= source <(fzf --bash)
-    fi
 fi
+
 
 
 # history 命令输出的记录数量
@@ -25,30 +17,30 @@ export HISTCONTROL=ignorespace:ignoredups:erasedups
 
 
 update_prompt() {
-	if [[ $? == 0 ]];then
-		PS1='\[\e[1;32m\]:) '
-	else 
-		PS1='\[\e[1;31m\]:( '
-	fi
+    if [[ $? == 0 ]];then
+        PS1='\[\e[1;32m\]:) '
+    else
+        PS1='\[\e[1;31m\]:( '
+    fi
 
-	if [[ $UID -eq 0 ]];then
-		PS1+='\[\e[1;31m\]\u '
-	else
-		PS1+='\[\e[1;37m\]\u '
-	fi
+    if [[ $UID -eq 0 ]];then
+        PS1+='\[\e[1;31m\]\u '
+    else
+        PS1+='\[\e[1;37m\]\u '
+    fi
 
-	PS1+='\[\e[1;34m\]\w '
+    PS1+='\[\e[1;34m\]\w '
 
-	if [[ -v http_proxy ]];then
-		PS1+='\[\e[1;33m\](proxy) '
-	fi
+    if [[ -v http_proxy ]];then
+        PS1+='\[\e[1;33m\](proxy) '
+    fi
 
-	if [[ $UID -eq 0 ]];then 
-		PS1+='\[\e[1;31m\]\$ '
-	else
-		PS1+='\[\e[1;32m\]\$ '
-	fi
-	PS1+='\[\e[0m\]'
+    if [[ $UID -eq 0 ]];then
+        PS1+='\[\e[1;31m\]\$ '
+    else
+        PS1+='\[\e[1;32m\]\$ '
+    fi
+    PS1+='\[\e[0m\]'
 }
 PROMPT_COMMAND=update_prompt
 
@@ -71,13 +63,14 @@ alias mpv-novideo='mpv --no-video --force-window=no --loop-file=inf'
 
 # 终端代理
 function pon(){
-	history -w
-	(
-		proxy='http://192.168.20.120:7890'
-		http_proxy=$proxy https_proxy=$proxy RSYNC_PROXY=$proxy bash
-	)
-	history -r
+    history -w
+    (
+        proxy='http://192.168.20.120:7890'
+        http_proxy=$proxy https_proxy=$proxy RSYNC_PROXY=$proxy bash
+    )
+    history -r
 }
+
 
 
 # Ctrl+d：Ctrl+u Ctrl+d -> 删除光标前到行首的所有内容，退出 shell
@@ -108,15 +101,18 @@ bind "set colored-stats on"
 bind "set colored-completion-prefix on"
 
 
+
 # 关闭终端对 Ctrl+S / Ctrl+Q 的软件流控制
 stty -ixon
 # 屏蔽 Ctrl+s 防止终端冻结
 bind '"\C-s": ""'
 
 
+
 # Alt + t 在当前目录打开新终端
 alias newterm="bash -c 'swaymsg splitv && foot -D \$PWD &>/dev/null && swaymsg split none &>/dev/null &'"
 bind -x '"\et":"newterm"'
+
 
 
 # 终端 title 设置
@@ -132,3 +128,15 @@ case "$TERM" in
         trap 'set_title' DEBUG
     ;;
 esac
+
+
+
+# 加载 fzf
+# Ctrl+R：模糊搜索历史命令
+# Ctrl+T：模糊选择文件路径，直接粘贴到当前命令行
+# Alt+C：模糊选择目录并直接 cd 进入
+# 配合 ** 补全：输入 vim **<Tab>，会弹出 fzf 界面让你搜索文件再打开
+if [[ -x "/usr/bin/fzf" ]]; then
+    # 变量置空，仅使用 Ctrl+R 历史搜索命令
+    FZF_CTRL_T_COMMAND= FZF_ALT_C_COMMAND= source <(fzf --bash)
+fi
