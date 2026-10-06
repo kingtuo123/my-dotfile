@@ -1,0 +1,22 @@
+#!/bin/bash
+
+area=$(slurp 2>/dev/null)
+
+[[ -z "${area}" ]] && exit 0
+
+tmpimg="/tmp/screenshot.png"
+
+grim -g "${area}" ${tmpimg}
+
+w=$(file ${tmpimg} | grep -Po '[0-9]+(?= x)')
+h=$(file ${tmpimg} | grep -Po '(?<=x )[0-9]+')
+
+swayimg -c viewer.fixed=yes -a "screenshot"  -w $((w/2)),$((h/2)) ${tmpimg} &
+
+result=$(zenity --question --title "保存" --text "是否保存截图？")
+
+if [ $? -eq 0 ]; then
+    cp ${tmpimg} ~/$(date '+%Y-%m-%d-%H:%M:%S').png
+fi
+
+killall swayimg

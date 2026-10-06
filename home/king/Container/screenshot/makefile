@@ -1,4 +1,4 @@
-PN  := debian-base
+PN  := screenshot
 PV  := latest
 
 # must required
@@ -21,13 +21,20 @@ OPT += -v /etc/machine-id:/etc/machine-id
 OPT += --device /dev/dri
 OPT += --shm-size=1g
 OPT += --cap-add=SYS_ADMIN
+#OPT += --privileged
 #OPT += -v ~/Music:/home/debian/Music
-#OPT += -v ~/.fonts:/home/debian/.fonts
+OPT += -v ~/.fonts:/home/debian/.fonts
 
+OPT += -v ./screenshot:/usr/bin/screenshot
+OPT += -v ./config:/home/debian/.config/swayimg/config
 
 .SILENT:
+run: homedir /tmp/dconf
+	docker run --rm  -d --name $(PN) $(OPT) $(PN):$(PV)
+
+
 bash: homedir /tmp/dconf
-	docker run --rm -it --name $(PN) $(OPT) $(PN):$(PV)
+	docker run --rm -it --name $(PN) $(OPT) $(PN):$(PV) bash
 
 
 build:
@@ -36,7 +43,6 @@ build:
 
 homedir:
 	mkdir -p $@
-
 
 /tmp/dconf:
 	mkdir -p $@

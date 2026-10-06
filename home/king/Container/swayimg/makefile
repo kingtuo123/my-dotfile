@@ -1,4 +1,4 @@
-PN  := debian-base
+PN  := swayimg
 PV  := latest
 
 # must required
@@ -21,13 +21,22 @@ OPT += -v /etc/machine-id:/etc/machine-id
 OPT += --device /dev/dri
 OPT += --shm-size=1g
 OPT += --cap-add=SYS_ADMIN
+#OPT += --privileged
 #OPT += -v ~/Music:/home/debian/Music
 #OPT += -v ~/.fonts:/home/debian/.fonts
 
+OPT += -v ./config:/home/debian/.config/swayimg/config:ro
+dir ?= $(PWD)
+OPT += -v $(dir):/mnt:ro
+
 
 .SILENT:
+run: homedir /tmp/dconf
+	docker run --rm  -it --name $(PN) $(OPT) $(PN):$(PV)
+
+
 bash: homedir /tmp/dconf
-	docker run --rm -it --name $(PN) $(OPT) $(PN):$(PV)
+	docker run --rm -it --name $(PN) $(OPT) $(PN):$(PV) bash
 
 
 build:
@@ -36,7 +45,6 @@ build:
 
 homedir:
 	mkdir -p $@
-
 
 /tmp/dconf:
 	mkdir -p $@

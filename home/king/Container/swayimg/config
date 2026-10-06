@@ -1,0 +1,222 @@
+# Swayimg 配置文件。
+# vim: filetype=dosini
+
+# 本文件包含默认配置。
+# 查看器按以下顺序查找配置文件：
+# 1. $XDG_CONFIG_HOME/swayimg/config
+# 2. $HOME/.config/swayimg/config
+# 3. $XDG_CONFIG_DIRS/swayimg/config
+# 4. /etc/xdg/swayimg/config
+
+# 以上任意选项都可以通过命令行上的 --config 参数覆盖，例如：
+# $ swayimg --config="general.mode=gallery"
+
+################################################################################
+# 通用配置
+################################################################################
+[general]
+# 启动时的模式（viewer 查看器 / gallery 图库）
+mode = viewer
+# 窗口位置（parent 或绝对坐标，如 100,200）
+position = parent
+# 窗口大小（fullscreen 全屏/parent 父窗口/image 图像大小，或绝对尺寸，如 800,600）
+size = 960,600
+# 是否使用窗口装饰（yes/no）
+decoration = yes
+# SIGUSR1 信号触发的动作（格式与按键绑定相同）
+sigusr1 = reload
+# SIGUSR2 信号触发的动作（格式与按键绑定相同）
+sigusr2 = next_file
+# 应用 ID 和窗口类名
+app_id = swayimg
+
+################################################################################
+# 查看器模式配置
+################################################################################
+[viewer]
+# 窗口背景色（RGBA）
+window = #232A2E
+# 透明图像的背景（grid 网格 / RGBA 颜色）
+transparency = #232A2E
+# 默认图像缩放比例（optimal 最佳/fit 适应/width 适应宽度/height 适应高度/fill 填充/real 原始大小）
+scale = optimal
+# 在切换图像时保持绝对缩放比例（yes/no）
+keep_zoom = no
+# 图像初始位置
+position = center
+# 将图像固定在窗口表面上（yes/no）
+fixed = yes
+# 抗锯齿模式（none/box/bilinear/bicubic/mks13）
+antialiasing = mks13
+# 启动时自动播放幻灯片（yes/no）
+slideshow = no
+# 幻灯片中每张图片的显示时间（秒）
+slideshow_time = 3
+# 缓存中保存的历史查看记录数量
+history = 1
+# 预加载（预读）的图像数量
+preload = 1
+
+################################################################################
+# 图库模式配置
+################################################################################
+[gallery]
+# 缩略图大小（像素）
+size = 200
+# 内存缓存中缩略图的最大数量，0 表示不限制
+cache = 100
+# 是否将缩略图保存到持久化存储中（yes/no）
+pstore = yes
+# 用缩略图填满整个格子（yes/no）
+fill = yes
+# 缩略图的抗锯齿模式（none/box/bilinear/bicubic/mks13）
+antialiasing = mks13
+# 窗口背景色（RGBA）
+window = #232A2E
+# 格子背景色（RGBA）
+background = #232A2E
+# 选中格子的背景色（RGBA）
+select = #232A2E
+# 选中格子的边框颜色（RGBA）
+border = #A7C08000
+# 选中格子的阴影颜色（RGBA）
+shadow = #A7C08000
+
+################################################################################
+# 图像列表配置
+################################################################################
+[list]
+# 默认排序方式（none 不排序/alpha 按字母/reverse 反向/random 随机）
+order = alpha
+# 图像列表循环（yes/no）
+loop = no
+# 递归读取目录（yes/no）
+recursive = no
+# 打开指定文件所在目录中的所有文件（yes/no）
+all = no
+
+################################################################################
+# 字体配置
+################################################################################
+[font]
+# 字体名称
+name = WenQuanYi Micro Hei
+# 字体大小（磅，pt）
+size = 18
+# 字体颜色（RGBA）
+color = #D3C6AA
+# 阴影颜色（RGBA）
+shadow = #000000d0
+# 背景颜色（RGBA）
+background = #00000000
+
+################################################################################
+# 图像元信息显示方案（格式、尺寸、EXIF 等）
+################################################################################
+[info]
+# 启动时显示（yes/no）
+show = yes
+# 自动隐藏信息的超时时间（秒，0 表示始终显示）
+info_timeout = 0
+# 状态消息自动隐藏的超时时间（秒）
+status_timeout = 3
+
+# 查看器模式的显示方案（位置 = 内容）
+[info.viewer]
+top_left = +name,+format,+filesize,+imagesize,+exif
+top_right = index
+bottom_left = scale,frame
+bottom_right = status
+
+# 图库模式的显示方案（位置 = 内容）
+[info.gallery]
+top_left = none
+top_right = none
+bottom_left = none
+bottom_right = name,status
+
+################################################################################
+# 查看器模式按键绑定配置：按键 = 动作 [参数]
+################################################################################
+[keys.viewer]
+F1 = help
+Home = first_file
+End = last_file
+Prior = prev_file
+Next = next_file
+Space = mode
+Shift+r = rand_file
+Shift+d = prev_dir
+d = next_dir
+Shift+o = prev_frame
+o = next_frame
+c = skip_file
+Shift+s = slideshow
+s = animation
+f = fullscreen
+Return = mode
+Equal = zoom +10
+Plus = zoom +10
+Minus = zoom -10
+w = zoom width
+Shift+w = zoom height
+z = zoom fit
+Shift+z = zoom fill
+0 = zoom real
+BackSpace = zoom optimal
+Alt+s = scale
+Alt+z = keep_zoom
+bracketleft = rotate_left
+bracketright = rotate_right
+m = flip_vertical
+Shift+m = flip_horizontal
+a = antialiasing
+Shift+Delete = exec rm "%"; skip_file
+r = reload
+i = info
+q = exit
+0 = zoom real
+Escape = mode gallery
+# 鼠标相关
+MouseMiddle = zoom fit
+ScrollUp = zoom +10 
+ScrollDown = zoom -10 
+MouseRight = info
+MouseSide = prev_file
+MouseExtra = next_file
+Left = prev_file
+Right = next_file
+Up = zoom +10
+Down = zoom -10
+h = prev_file
+l = next_file
+k = zoom +10
+j = zoom -10
+
+################################################################################
+# 图库模式按键绑定配置：按键 = 动作 [参数]
+################################################################################
+[keys.gallery]
+F1 = help
+Home = first_file
+End = last_file
+Left = step_left
+Right = step_right
+Up = step_up
+Down = step_down
+h = step_left
+l = step_right
+k = step_up
+j = step_down
+Prior = page_up
+Next = page_down
+c = skip_file
+f = fullscreen
+Return = mode
+space = mode
+a = antialiasing
+r = reload
+i = info
+Shift+Delete = exec rm "%"; skip_file
+Escape = exit
+q = exit

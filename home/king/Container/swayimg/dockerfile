@@ -1,0 +1,13 @@
+FROM debian-base:latest
+
+ARG PKG="swayimg"
+
+USER root
+WORKDIR /root
+
+RUN apt install -y ${PKG} && apt clean
+
+USER debian
+WORKDIR /home/debian
+
+CMD [ "swayimg", "/mnt" ]
