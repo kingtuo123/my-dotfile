@@ -29,6 +29,7 @@ if [[ -z "${DBUS_SESSION_BUS_ADDRESS}" ]]; then
     else
         dbus-daemon --session --address=unix:path=/run/user/$(id -u)/bus --fork --print-address > ${log}
         export DBUS_SESSION_BUS_ADDRESS=$(<${log})
+        /usr/libexec/at-spi-bus-launcher --launch-immediately &
     fi
     unset log
 fi

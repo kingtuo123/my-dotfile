@@ -16,7 +16,7 @@ swayimg -c viewer.fixed=yes -a "screenshot"  -w $((w/2)),$((h/2)) ${tmpimg} &
 result=$(zenity --question --title "保存" --text "是否保存截图？")
 
 if [ $? -eq 0 ]; then
-    cp ${tmpimg} ~/$(date '+%Y-%m-%d-%H:%M:%S').png
+    cp ${tmpimg} ~/$(date '+%Y-%m-%d-%H%M%S').png
 fi
 
 killall swayimg

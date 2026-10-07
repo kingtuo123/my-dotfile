@@ -262,12 +262,12 @@ vim.keymap.set('n', '<leader>x', '<C-w>x')           -- 交换窗口
 
 
 -- 按下 ESC 键时切换 fcitx 为英文输入法
-function fcitx() 
-	if vim.env.TERM ~= "linux" then
-		os.execute("fcitx5-remote -c &")
-	end
-end
-vim.keymap.set({'i','n'}, "<ESC>", "<ESC><cmd>lua fcitx()<CR>")
+--function fcitx() 
+--	if vim.env.TERM ~= "linux" then
+--		os.execute("fcitx5-remote -c &")
+--	end
+--end
+--vim.keymap.set({'i','n'}, "<ESC>", "<ESC><cmd>lua fcitx()<CR>")
 
 
 

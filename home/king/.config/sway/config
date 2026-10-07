@@ -22,7 +22,7 @@ input "13652:62858:Compx_VXE_NordicMouse_1K_Dongle" {
 
 # 自启动应用
 exec /usr/bin/gentoo-pipewire-launcher restart &>/dev/null &
-exec fcitx5 -D &>/dev/null &
+exec make -C ~/Container/fcitx5 &
 exec mako &
 exec wlsunset -l 28 -L 120 -t 5000 -T 6000 &
 exec swayidle -w timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
