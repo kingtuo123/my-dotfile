@@ -50,6 +50,20 @@ install-pinyin-baishuang:
 	git clone --depth 1 https://github.com/gaboolic/rime-frost ./homedir/.local/share/fcitx5/rime
 
 
+# 薄荷拼音
+install-pinyin-mint:
+	mkdir -p ./homedir/.local/share/fcitx5
+	rm -rf ./homedir/.local/share/fcitx5/rime
+	git clone --depth 1 https://github.com/Mintimate/oh-my-rime ./homedir/.local/share/fcitx5/rime
+
+
+# 万象拼音
+install-pinyin-wanxiang:
+	mkdir -p ./homedir/.local/share/fcitx5
+	rm -rf ./homedir/.local/share/fcitx5/rime
+	git clone --depth 1 https://github.com/amzxyz/rime-wanxiang ./homedir/.local/share/fcitx5/rime
+
+
 install-theme-everforest:
 	mkdir -p ./homedir/.local/share/fcitx5/themes
 	git clone --depth 1 https://github.com/RickyJian/fcitx5-everforest ./homedir/.local/share/fcitx5/themes

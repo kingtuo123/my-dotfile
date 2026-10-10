@@ -9,17 +9,37 @@ net-misc/chrony           -* caps rtc cmdmon readline seccomp
 media-libs/freetype       harfbuzz
 dev-embedded/openocd      -* jlink usb
 dev-debug/gdb             server multitarget source-highlight xml
-app-emulation/qemu        qemu_softmmu_targets_arm  qemu_softmmu_targets_x86_64  qemu_user_targets_x86_64 vnc spice ssh usb fuse virtfs usbredir
-app-containers/incus      qemu
+
+
+
+
+################################################## Inucs ##################################################
+# qemu 虚拟机支持
+app-containers/incus    qemu
 
 # Incus 直接调用 SPICE 客户端，不需要通过 libvirt 查找虚拟机
-app-emulation/virt-viewer   -* -libvirt spice
+app-emulation/virt-viewer    -* -libvirt spice
 
 # Incus 需要 nftables 支持 json 来管理 nftables 规则
 net-firewall/nftables    json
 
+# ???
 net-firewall/iptables    nftables
 
-
-# HDMI 控制显示器亮度软件。usb-monitor：usb 支持；user-permissions：非 root 用户访问 /dev/i2c-* 权限。
+################################################## ddcutil ##################################################
+# HDMI 控制显示器亮度软件。
+# usb-monitor：usb 支持
+# user-permissions：非 root 用户访问 /dev/i2c-* 权限。
 app-misc/ddcutil    user-permissions
+
+################################################## qemu ##################################################
+# user（用户模式） 模拟单个进程，仅在需要跨架构运行单个程序时开启
+# softmmu（系统模式） 模拟整台机器/完整的系统
+# vnc       启用 VNC 服务器，支持远程图形访问
+# spice     启用 SPICE 协议，提供更高效的远程桌面体验，需要更好的远程图形/音频体验时开启，通常配合 vnc 使用
+# ssh       通过 SSH 访问远程磁盘镜像，需要从 SSH 服务器直接启动虚拟机时才开启
+# usb       启用 USB 设备直通支持
+# fuse      启用 FUSE 块设备支持，需要挂载 FUSE 文件系统作为虚拟机磁盘时开启
+# virtfs    启用 VirtFS（virtio-9p），在主机和虚拟机间共享目录
+# usbredir  将 USB 设备从客户端重定向到虚拟机，配合 SPICE 或 USB 直通使用，用于远程 USB 重定向
+app-emulation/qemu    qemu_softmmu_targets_arm  qemu_softmmu_targets_x86_64  qemu_user_targets_x86_64 vnc spice ssh usb fuse virtfs usbredir

@@ -1,6 +1,9 @@
+#!/bin/bash
+
 iptables -I DOCKER-USER -i incusbr0 -j ACCEPT
+sleep 0.2
 iptables -I DOCKER-USER -o incusbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-
-
+sleep 0.2
 iptables -I DOCKER-USER -i incusbr-1000 -j ACCEPT
+sleep 0.2
 iptables -I DOCKER-USER -o incusbr-1000 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT

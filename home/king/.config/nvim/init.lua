@@ -18,7 +18,7 @@ vim.opt.rtp:prepend(lazypath)
 
 
 
-vim.g.mapleader = " "         -- 设置空格为 <leader> 键 
+vim.g.mapleader = " "         -- 设置空格为 <leader> 键
 vim.opt.termguicolors = true  -- 启用真彩色支持
 
 
@@ -58,9 +58,9 @@ require("lazy").setup({
         end
     },
 --------------------------------------------------[[     语法高亮优化     ]]--------------------------------------------------
-    {
-        "nvim-treesitter/nvim-treesitter", branch = 'master', lazy = false, build = ":TSUpdate"
-    },
+    --{
+    --    "nvim-treesitter/nvim-treesitter", branch = 'master', lazy = false, build = ":TSUpdate"
+    --},
 --------------------------------------------------[[    显示颜色#666666   ]]--------------------------------------------------
     {
         'brenoprata10/nvim-highlight-colors',
@@ -72,7 +72,7 @@ require("lazy").setup({
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('telescope').setup({
-                defaults = { 
+                defaults = {
                     initial_mode = "normal",
                     mappings = {
                         i = {
@@ -127,36 +127,36 @@ require("lazy").setup({
         end
     },
 --------------------------------------------------[[      底部状态栏      ]]--------------------------------------------------
-    {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        config = function()
-            require('lualine').setup({
-                options = {
-                    theme = 'auto',
-                    icons_enabled = false,
-                    globalstatus = true, -- 全局状态栏，有多个窗口时只显示最底下的状态栏
-                },
-                sections = {
-                    lualine_a = {'mode'},
-                    --lualine_b = {'filename', path = { 1 }, },
-                    lualine_b = {
-                        { 'filename', path = 1 } -- 显示如 "lua/config/lualine.lua"
-                    },
-                    lualine_c = {},
-                    lualine_x = {},
-                    lualine_y = {'progress'},
-                    lualine_z = {'location'},
-                }
-            })
-        end
-    },
+    --{
+    --    'nvim-lualine/lualine.nvim',
+    --    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    --    config = function()
+    --        require('lualine').setup({
+    --            options = {
+    --                theme = 'auto',
+    --                icons_enabled = false,
+    --                globalstatus = true, -- 全局状态栏，有多个窗口时只显示最底下的状态栏
+    --            },
+    --            sections = {
+    --                lualine_a = {'mode'},
+    --                --lualine_b = {'filename', path = { 1 }, },
+    --                lualine_b = {
+    --                    { 'filename', path = 1 } -- 显示如 "lua/config/lualine.lua"
+    --                },
+    --                lualine_c = {},
+    --                lualine_x = {},
+    --                lualine_y = {'progress'},
+    --                lualine_z = {'location'},
+    --            }
+    --        })
+    --    end
+    --},
 --------------------------------------------------[[ 高亮当前窗口的分界线 ]]--------------------------------------------------
-    {
-        "nvim-zh/colorful-winsep.nvim",
-        config = true,
-        event = { "WinLeave" },
-    },
+    --{
+    --    "nvim-zh/colorful-winsep.nvim",
+    --    config = true,
+    --    event = { "WinLeave" },
+    --},
 })
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -168,10 +168,11 @@ vim.opt.titlestring    = "nvim @ %F %m" -- 标题格式
 vim.opt.number         = true           -- 显示行号
 vim.opt.relativenumber = true           -- 相对行号
 vim.opt.autoindent     = true           -- 自动缩进
-vim.opt.wrap           = false          -- 超出屏幕宽度的代码是否可见
+vim.opt.wrap           = false          -- 不自动换行
 vim.opt.cursorline     = true           -- 高亮光标所在行
 vim.opt.cursorcolumn   = true           -- 高亮光标所在列
-vim.opt.scrolloff      = 3              -- 滚动保留行数
+vim.opt.scrolloff      = 5              -- 上下滚动保留行数
+vim.opt.sidescrolloff  = 10             -- 左右滚动保留列数
 vim.opt.splitright     = true           -- 默认新窗口右
 vim.opt.splitbelow     = true           -- 默认新窗口下
 vim.opt.fillchars      = { eob = ' ' }  -- 将行末波浪号替换为空格
@@ -199,7 +200,7 @@ vim.opt.listchars = {
 
 
 
--- tab 键配置
+-------------------- Tab 键配置 --------------------
 vim.opt.expandtab      = true           -- 替换 tab 为空格
 vim.opt.tabstop        = 4              -- 真实的 tab 制表符显示宽度为 4 个空格
 vim.opt.shiftwidth     = 4              -- 替换后的 tab 缩进宽度为 4 个空格
@@ -261,14 +262,16 @@ vim.keymap.set('n', '<leader>x', '<C-w>x')           -- 交换窗口
 
 
 
--- 按下 ESC 键时切换 fcitx 为英文输入法
---function fcitx() 
---	if vim.env.TERM ~= "linux" then
---		os.execute("fcitx5-remote -c &")
---	end
---end
---vim.keymap.set({'i','n'}, "<ESC>", "<ESC><cmd>lua fcitx()<CR>")
-
+-- 按下 ESC 键时关闭 fcitx 输入法
+function fcitx()
+    if vim.env.TERM ~= "linux" then
+        -- os.execute("docker exec -d fcitx5 fcitx5-remote -c >/dev/null 2>&1 &")
+        -- vim.fn.jobstart('docker exec -d fcitx5 fcitx5-remote -c', { detach = true })
+        vim.fn.jobstart('dbus-send --session --type=method_call --dest=org.fcitx.Fcitx5 /controller org.fcitx.Fcitx.Controller1.Deactivate', { detach = true })
+    end
+end
+-- vim.keymap.set({'i','n'}, "<ESC>", "<ESC><cmd>lua fcitx()<CR>")
+vim.keymap.set({'i'}, "<ESC>", "<ESC><cmd>lua fcitx()<CR>")
 
 
 

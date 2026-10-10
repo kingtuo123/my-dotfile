@@ -1,0 +1,15 @@
+FROM debian-base:latest
+
+ARG PKG="nodejs npm mpv"
+
+USER root
+WORKDIR /root
+
+RUN apt install -y ${PKG} \
+    && npm install -y -g @music163/ncm-cli \
+    && apt clean
+
+USER debian
+WORKDIR /home/debian
+
+CMD [ "ncm-cli", "tui" ]
