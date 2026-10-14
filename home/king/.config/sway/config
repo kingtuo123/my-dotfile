@@ -214,6 +214,7 @@ for_window [ app_id = "remote-viewer"              ] floating enable
 for_window [ app_id = "wechat"                     ] floating enable
 assign     [ app_id = "wechat"                     ] workspace $ws-wechat
 for_window [ app_id = "swayimg"                    ] floating enable
+for_window [ app_id = "baidunetdisk"               ] floating enable, border pixel
 
 
 

@@ -1,0 +1,16 @@
+FROM debian-base:latest
+
+ARG PKG="uxplay gstreamer1.0-plugins-good gstreamer1.0-plugins-bad"
+
+USER root
+WORKDIR /root
+
+RUN apt install -y ${PKG} && apt clean
+
+COPY start.sh /usr/bin
+COPY avahi-daemon.conf /etc/avahi/avahi-daemon.conf
+
+USER debian
+WORKDIR /home/debian
+
+CMD [ "start.sh" ]

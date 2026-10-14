@@ -21,7 +21,6 @@ COPY bash.bashrc /etc/bash.bashrc
 STOPSIGNAL SIGKILL
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
-ENV XDG_RUNTIME_DIR=/run/user/${UID}
 USER ${USER}
 WORKDIR /home/${USER}
 
