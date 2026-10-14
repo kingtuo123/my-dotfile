@@ -1,12 +1,13 @@
 FROM debian-base:latest
 
+ARG DEB
 ARG PKG="libnss3 libxt6t64"
 
 USER root
 WORKDIR /root
 
 RUN --mount=type=bind,source=./distdir,target=/root/distdir \
-    apt install -y /root/distdir/*.deb \
+    apt install -y /root/distdir/${DEB} \
     && apt install -y ${PKG} \
     && apt clean
 

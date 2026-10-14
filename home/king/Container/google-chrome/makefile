@@ -1,51 +1,26 @@
 PN  := googlel-chrome
-PV  := 153.0.8010.36
+PV  := 154.0.8037.92
 URI := https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_$(PV)-1_amd64.deb
 
 
-# must required
+USE := default  home  wayland  dbus  audio  gpu  fonts
 OPT := --network host
-OPT += -v ./homedir:/home/debian
-# wayland
-OPT += -e WAYLAND_DISPLAY=wayland-1
-OPT += -v /run/user/1000/wayland-1:/run/user/1000/wayland-1
-# pipewire & pulseaudio
-OPT += -v /run/user/1000/pipewire-0:/run/user/1000/pipewire-0
-OPT += -v /run/user/1000/pulse/native:/run/user/1000/pulse/native
-# dbus
-OPT += -e DBUS_SESSION_BUS_ADDRESS=$$DBUS_SESSION_BUS_ADDRESS
-OPT += -v /run/user/1000/bus:/run/user/1000/bus
-OPT += -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
-# optional
-OPT += -v /etc/machine-id:/etc/machine-id
-OPT += -v /tmp/dconf:/run/user/1000/dconf
-OPT += --device /dev/dri
-OPT += --shm-size=1g
-OPT += --cap-add=SYS_ADMIN
-#OPT += --privileged
-#OPT += -v ~/Music:/home/debian/Music
-OPT += -v ~/.fonts:/home/debian/.fonts
 
 
-.SILENT:
-run: homedir /tmp/dconf
-	docker run --rm  -d --name $(PN) $(OPT) $(PN):$(PV)
+run: $(USE)
+	docker run --rm -d  --name $(PN) $(OPT) $(PN):$(PV)
 
 
-bash: homedir /tmp/dconf
+bash: $(USE)
 	docker run --rm -it --name $(PN) $(OPT) $(PN):$(PV) bash
 
 
 build:
-	docker build -t $(PN):$(PV) --network host .
+	docker build -t $(PN):$(PV) --build-arg "DEB=$(PN)-$(PV).deb" --network host .
 
 
 fetch:
 	curl -L $(URI) -C - --create-dirs -o ./distdir/$(PN)-$(PV).deb
 
 
-homedir:
-	mkdir -p $@
-
-/tmp/dconf:
-	mkdir -p $@
+include ../makefile

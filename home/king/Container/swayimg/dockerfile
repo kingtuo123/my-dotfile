@@ -7,6 +7,8 @@ WORKDIR /root
 
 RUN apt install -y ${PKG} && apt clean
 
+COPY config /etc/xdg/swayimg/config
+
 USER debian
 WORKDIR /home/debian
 

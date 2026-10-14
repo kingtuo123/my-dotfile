@@ -89,7 +89,7 @@ shadow = #A7C08000
 # 默认排序方式（none 不排序/alpha 按字母/reverse 反向/random 随机）
 order = alpha
 # 图像列表循环（yes/no）
-loop = no
+loop = yes
 # 递归读取目录（yes/no）
 recursive = no
 # 打开指定文件所在目录中的所有文件（yes/no）

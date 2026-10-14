@@ -2,7 +2,7 @@ PN := debian-base
 PV := latest
 
 
-USE := default home  wayland  audio  dbus  gpu  fonts
+USE := default  home  wayland  audio  dbus  gpu  fonts
 OPT := --network host
 
 

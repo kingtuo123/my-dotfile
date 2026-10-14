@@ -1,6 +1,6 @@
 .SILENT:
 all:
-	echo "Available use:  home  wayland  dbus  audio  gpu  fonts  music"
+	echo "Available use:  default  home  wayland  dbus  audio  gpu  fonts  music"
 
 
 ################################################## default ##################################################
@@ -48,7 +48,7 @@ wayland: /run/user/1000/wayland-1
 
 ################################################## dbus ##################################################
 define use_dbus
-OPT += -e DBUS_SESSION_BUS_ADDRESS=$$DBUS_SESSION_BUS_ADDRESS
+OPT += -e DBUS_SESSION_BUS_ADDRESS=$$$$DBUS_SESSION_BUS_ADDRESS
 OPT += -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 OPT += -v /run/user/1000/bus:/run/user/1000/bus
 OPT += -v /run/user/1000/at-spi/bus:/run/user/1000/at-spi/bus
