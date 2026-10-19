@@ -1,0 +1,16 @@
+FROM debian-base:latest
+
+ARG USER
+ARG DEB
+
+USER root
+WORKDIR /root
+
+RUN --mount=type=bind,source=./distdir,target=/root/distdir \
+    apt install -y /root/distdir/${DEB} \
+    && apt clean
+
+USER ${USER}
+WORKDIR /home/${USER}
+
+CMD [ "SPlayer-Next" ]
