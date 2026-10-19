@@ -2,7 +2,7 @@
 
 for repo in /var/db/repos/* ;do
     echo -en "\n"
-    echo -en "\e[35m[$(basename $repo)]\e[0m"
+    echo -en "\e[35;1m[$(basename $repo)]\e[0m"
     timestamp=$(<${repo}/metadata/timestamp.chk)
 
     target=$(date -d "$timestamp" +%s)

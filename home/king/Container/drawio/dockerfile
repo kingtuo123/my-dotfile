@@ -1,5 +1,6 @@
 FROM debian-base:latest
 
+ARG USER
 ARG DEB
 
 USER root
@@ -9,7 +10,7 @@ RUN --mount=type=bind,source=./distdir,target=/root/distdir \
     apt install -y /root/distdir/${DEB} \
     && apt clean
 
-USER debian
-WORKDIR /home/debian
+USER ${USER}
+WORKDIR /home/${USER}
 
 CMD [ "drawio", "--enable-features=UseOzonePlatform", "--ozone-platform=wayland", "--disable-features=WaylandWpColorManagerV1", "--force-color-profile=srgb" ]

@@ -1,5 +1,5 @@
 PN  := googlel-chrome
-PV  := 154.0.8037.92
+PV  := 155.0.8059.39
 URI := https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_$(PV)-1_amd64.deb
 
 
@@ -16,7 +16,7 @@ bash: $(USE)
 
 
 build:
-	docker build -t $(PN):$(PV) --build-arg "DEB=$(PN)-$(PV).deb" --network host .
+	docker build -t $(PN):$(PV) --build-arg "USER=$(USER)" --build-arg "DEB=$(PN)-$(PV).deb" --network host .
 
 
 fetch:

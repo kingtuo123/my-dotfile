@@ -16,7 +16,7 @@ bash: $(USE)
 
 
 build:
-	docker build -t $(PN):$(PV) --build-arg "DEB=$(PN)-$(PV).deb" --network host .
+	docker build -t $(PN):$(PV) --build-arg "USER=$(USER)" --build-arg "DEB=$(PN)-$(PV).deb" --network host .
 
 
 fetch:

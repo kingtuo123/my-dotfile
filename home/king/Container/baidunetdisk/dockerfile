@@ -1,5 +1,6 @@
 FROM debian-base:latest
 
+ARG USER
 ARG DEB
 ARG PKG="libnss3 libxt6t64"
 
@@ -11,7 +12,7 @@ RUN --mount=type=bind,source=./distdir,target=/root/distdir \
     && apt install -y ${PKG} \
     && apt clean
 
-USER debian
-WORKDIR /home/debian
+USER ${USER}
+WORKDIR /home/${USER}
 
 CMD [ "/opt/baidunetdisk/baidunetdisk", "--no-sandbox", "--enable-features=UseOzonePlatform", "--ozone-platform=wayland"  ]

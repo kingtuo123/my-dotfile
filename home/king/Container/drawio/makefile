@@ -1,5 +1,5 @@
 PN  := drawio
-PV  := 32.4.1
+PV  := 32.5.5
 URI := https://github.com/jgraph/drawio-desktop/releases/download/v$(PV)/drawio-amd64-$(PV).deb
 
 
@@ -16,7 +16,7 @@ bash: $(USE)
 
 
 build:
-	docker build -t $(PN):$(PV) --build-arg "DEB=$(PN)-$(PV).deb" --network host .
+	docker build -t $(PN):$(PV) --build-arg "USER=$(USER)" --build-arg "DEB=$(PN)-$(PV).deb" --network host .
 
 
 fetch:

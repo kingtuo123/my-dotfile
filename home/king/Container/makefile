@@ -1,27 +1,35 @@
+USER := king
+UID  := 1000
+
 .SILENT:
 all:
 	echo "Available use:  default  home  wayland  dbus  audio  gpu  fonts  music"
 
 
+################################################## - ##################################################
+-%:
+	:
+
+
 ################################################## default ##################################################
 define use_default
-OPT += -e XDG_RUNTIME_DIR=/run/user/1000
-OPT += -v /tmp/1000:/run/user/1000
+OPT += -e XDG_RUNTIME_DIR=/run/user/$(UID)
+OPT += -v /tmp/$(UID):/run/user/$(UID)
 endef
 
 
-default: /tmp/1000
+default: /tmp/$(UID)
 	$(eval $(use_default))
 
 
-/tmp/1000:
+/tmp/$(UID):
 	mkdir -p $@
 
 
 ################################################## home ##################################################
 define use_home
-OPT += -v ./homedir:/home/debian
-OPT += -e XDG_CONFIG_HOME=/home/debian/.config
+OPT += -v ./homedir:/home/$(USER)
+OPT += -e XDG_CONFIG_HOME=/home/$(USER)/.config
 endef
 
 
@@ -38,11 +46,11 @@ homedir:
 define use_wayland
 OPT += -e WAYLAND_DISPLAY=wayland-1
 OPT += -e XDG_SESSION_TYPE=wayland
-OPT += -v /run/user/1000/wayland-1:/run/user/1000/wayland-1
+OPT += -v /run/user/$(UID)/wayland-1:/run/user/$(UID)/wayland-1
 endef
 
 
-wayland: /run/user/1000/wayland-1
+wayland: /run/user/$(UID)/wayland-1
 	$(eval $(use_wayland))
 
 
@@ -50,14 +58,14 @@ wayland: /run/user/1000/wayland-1
 define use_dbus
 OPT += -e DBUS_SESSION_BUS_ADDRESS=$$$$DBUS_SESSION_BUS_ADDRESS
 OPT += -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
-OPT += -v /run/user/1000/bus:/run/user/1000/bus
-OPT += -v /run/user/1000/at-spi/bus:/run/user/1000/at-spi/bus
+OPT += -v /run/user/$(UID)/bus:/run/user/$(UID)/bus
+OPT += -v /run/user/$(UID)/at-spi/bus:/run/user/$(UID)/at-spi/bus
 OPT += -v /etc/machine-id:/etc/machine-id
-OPT += -v /tmp/dconf:/run/user/1000/dconf
+OPT += -v /tmp/dconf:/run/user/$(UID)/dconf
 endef
 
 
-dbus: /run/dbus/system_bus_socket /run/user/1000/bus /run/user/1000/at-spi/bus /etc/machine-id /tmp/dconf
+dbus: /run/dbus/system_bus_socket /run/user/$(UID)/bus /run/user/$(UID)/at-spi/bus /etc/machine-id /tmp/dconf
 	$(eval $(use_dbus))
 
 
@@ -68,12 +76,12 @@ dbus: /run/dbus/system_bus_socket /run/user/1000/bus /run/user/1000/at-spi/bus /
 
 ################################################## audio ##################################################
 define use_audio
-OPT += -v /run/user/1000/pipewire-0:/run/user/1000/pipewire-0
-OPT += -v /run/user/1000/pulse/native:/run/user/1000/pulse/native
+OPT += -v /run/user/$(UID)/pipewire-0:/run/user/$(UID)/pipewire-0
+OPT += -v /run/user/$(UID)/pulse/native:/run/user/$(UID)/pulse/native
 endef
 
 
-audio: /run/user/1000/pipewire-0 /run/user/1000/pulse/native
+audio: /run/user/$(UID)/pipewire-0 /run/user/$(UID)/pulse/native
 	$(eval $(use_audio))
 
 
@@ -91,7 +99,7 @@ gpu: /dev/dri
 
 ################################################## fonts ##################################################
 define use_fonts
-OPT += -v ~/.fonts:/home/debian/.fonts
+OPT += -v ~/.fonts:/home/$(USER)/.fonts
 endef
 
 
@@ -101,7 +109,7 @@ fonts: ~/.fonts
 
 ################################################## music ##################################################
 define use_music
-OPT += -v ~/Music:/home/debian/Music
+OPT += -v ~/Music:/home/$(USER)/Music
 endef
 
 

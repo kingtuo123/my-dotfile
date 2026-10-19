@@ -19,7 +19,7 @@ bash: $(USE)
 
 
 build:
-	docker build -t $(PN):$(PV) --network host .
+	docker build -t $(PN):$(PV) --build-arg "USER=$(USER)" --network host .
 
 
 include ../makefile

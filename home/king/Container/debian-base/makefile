@@ -2,7 +2,7 @@ PN := debian-base
 PV := latest
 
 
-USE := default  home  wayland  audio  dbus  gpu  fonts
+USE := default  home  wayland  audio  dbus  gpu  fonts  music
 OPT := --network host
 
 
@@ -11,7 +11,7 @@ bash: $(USE)
 
 
 build:
-	docker build -t $(PN):$(PV) --network host .
+	docker build -t $(PN):$(PV) --build-arg "USER=$(USER)" --build-arg "UID=$(UID)" --network host .
 
 
 include ../makefile

@@ -1,5 +1,6 @@
 FROM debian-base:latest
 
+ARG USER
 ARG PKG="grim slurp swayimg zenity file"
 
 USER root
@@ -10,7 +11,7 @@ RUN apt install -y ${PKG} && apt clean
 COPY screenshot /usr/bin/screenshot
 COPY config /etc/xdg/swayimg/config
 
-USER debian
-WORKDIR /home/debian
+USER ${USER}
+WORKDIR /home/${USER}
 
 CMD [ "screenshot" ]

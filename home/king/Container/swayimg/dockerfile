@@ -1,5 +1,6 @@
 FROM debian-base:latest
 
+ARG USER
 ARG PKG="swayimg"
 
 USER root
@@ -9,7 +10,7 @@ RUN apt install -y ${PKG} && apt clean
 
 COPY config /etc/xdg/swayimg/config
 
-USER debian
-WORKDIR /home/debian
+USER ${USER}
+WORKDIR /home/${USER}
 
 CMD [ "swayimg", "/mnt" ]

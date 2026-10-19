@@ -6,7 +6,7 @@ fi
 echo -e "\nHello ${USER} !\n"
 
 
-#export GTK_IM_MODULE=fcitx
+export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export SDL_IM_MODULE=fcitx
@@ -37,6 +37,6 @@ fi
 
 
 
-if [[ -z "$(pgrep sway)" ]]; then
+if [[ -z "$(pgrep sway)" && -n "$(which sway)" ]]; then
     exec sway &>/tmp/sway.log
 fi

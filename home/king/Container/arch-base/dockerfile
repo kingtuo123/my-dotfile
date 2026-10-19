@@ -1,0 +1,25 @@
+FROM archlinux:latest
+
+ARG USER=jin
+ARG UID=1000
+ARG PKG="sudo pciutils mesa-utils pipewire-audio ttf-dejavu wqy-microhei foot bash-completion"
+
+RUN useradd -m -s /bin/bash -u ${UID} ${USER} \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    && echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen \
+    && echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist \
+    && pacman -Syu --noconfirm base-devel git ${PKG} \
+    && pacman -Scc --noconfirm \
+    && echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+COPY bash.bashrc /etc/bash.bashrc
+
+STOPSIGNAL SIGKILL
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+USER ${USER}
+WORKDIR /home/${USER}
+
+CMD [ "bash" ]
