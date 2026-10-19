@@ -216,7 +216,7 @@ for_window [ app_id = "wechat"                     ] floating enable
 assign     [ app_id = "wechat"                     ] workspace $ws-wechat
 for_window [ app_id = "swayimg"                    ] floating enable
 for_window [ app_id = "baidunetdisk"               ] floating enable, border pixel
-for_window [ app_id = "top.imsyy.splayer_next"     ] floating enable, border none
+for_window [ app_id = "top.imsyy.splayer_next"     ] workspace $ws-music, floating enable, border none
 assign     [ app_id = "top.imsyy.splayer_next"     ] workspace $ws-music
 
 

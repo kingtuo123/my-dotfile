@@ -1,0 +1,14 @@
+FROM debian-base:latest
+
+ARG USER
+ARG PKG="kid3"
+
+USER root
+WORKDIR /root
+
+RUN apt install -y ${PKG} && apt clean
+
+USER ${USER}
+WORKDIR /home/${USER}
+
+CMD [ "kid3" ]
