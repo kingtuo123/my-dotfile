@@ -1,7 +1,7 @@
 PN := splayer-next
 
 
-SELECT := nightly
+SELECT := stable
 
 
 define use_nightly
@@ -11,7 +11,7 @@ endef
 
 
 define use_stable
-PV  := 1.1.0
+PV  := 1.2.0
 URI := https://github.com/SPlayer-Dev/SPlayer-Next/releases/download/v$$(PV)/splayer-next-$$(PV)-amd64.deb
 endef
 
