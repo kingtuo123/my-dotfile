@@ -1,5 +1,5 @@
 PN  := cherry-studio
-PV  := 2.1.7
+PV  := 2.1.10
 URI := https://github.com/CherryHQ/cherry-studio/releases/download/v$(PV)/Cherry-Studio-$(PV)-linux-x64.deb
 
 

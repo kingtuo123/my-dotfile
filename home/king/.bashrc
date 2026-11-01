@@ -55,7 +55,7 @@ alias re-source='source ~/.bashrc'
 alias dmesg-check='dmesg | grep -i -e firmware -e fail -e error -e warn'
 alias b="cd ~/Github/blog"
 alias k="cd ~/Github/kingtuo123.github.io"
-alias mhz="watch -n1 'grep -i Mhz /proc/cpuinfo | sort -nr -t: -k2'"
+alias mhz="watch -n1 --no-title 'grep -i Mhz /proc/cpuinfo | sort -nr -t: -k2'"
 alias mpv-novideo='mpv --no-video --force-window=no --loop-file=inf'
 alias swayimg="make -C ~/Container/swayimg dir=\$PWD"
 
